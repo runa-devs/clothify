@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/env/index.js", "src/env/server.js", "src/env/client.js"  ],
   "exclude": [
     "node_modules"
   ]
