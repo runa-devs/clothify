@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,7 +17,14 @@ export default function RootLayout({
     <html lang="ja" suppressHydrationWarning>
       <SessionProvider>
         <body className="flex min-h-svh flex-col" suppressHydrationWarning>
-          <main className="flex flex-1 flex-col">{children}</main>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <main className="flex flex-1 flex-col">{children}</main>
+          </ThemeProvider>
         </body>
       </SessionProvider>
     </html>
