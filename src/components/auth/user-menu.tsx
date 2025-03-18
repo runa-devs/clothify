@@ -8,8 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Skeleton } from "@/components/ui/skeleton";
-import { LogIn, LogOut } from "lucide-react";
+import { LogIn, LogOut, UserIcon } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
@@ -19,18 +18,15 @@ export const UserMenu = () => {
   const user = session?.user;
 
   if (status === "loading") {
-    return <Skeleton className="size-10 animate-pulse rounded-full bg-muted" />;
+    return <UserIcon className="size-5" />;
   }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar className="select-none">
-          <AvatarImage draggable={false} src={user?.image ?? undefined} />
-          <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
-        </Avatar>
+        <UserIcon className="size-5" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align="end">
         <DropdownMenuItem>
           <Link href="#" className="flex items-center gap-2">
             <Avatar className="select-none">
@@ -49,12 +45,12 @@ export const UserMenu = () => {
         {user ? (
           <DropdownMenuItem className="cursor-pointer" onClick={() => signOut()}>
             <LogOut className="mr-2 size-4" />
-            Sign Out
+            ログアウト
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem className="cursor-pointer" onClick={() => signIn()}>
             <LogIn className="mr-2 size-4" />
-            Sign In
+            ログイン
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

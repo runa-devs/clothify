@@ -24,7 +24,7 @@ export const HeroSection = () => {
         </p>
         <div className="relative flex flex-col gap-4 sm:flex-row">
           <Button asChild size="lg" className="gap-2 bg-primary hover:bg-primary/90">
-            <Link href="/dashboard">
+            <Link href="/try-on">
               今すぐ試す <ArrowRight className="size-4" />
             </Link>
           </Button>
