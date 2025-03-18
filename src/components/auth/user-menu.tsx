@@ -31,13 +31,11 @@ export const UserMenu = () => {
           <Link href="#" className="flex items-center gap-2">
             <Avatar className="select-none">
               <AvatarImage draggable={false} src={user?.image ?? ""} />
-              <AvatarFallback>{user?.name?.charAt(0) ?? ""}</AvatarFallback>
+              <AvatarFallback>{user?.name?.charAt(0) ?? "U"}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <p className="text-sm font-bold">{user?.name ?? "Not Signed In"}</p>
-              <p className="text-xs text-muted-foreground">
-                {user?.email ?? "Sign in to see more Info"}
-              </p>
+              <p className="text-sm font-bold">{user?.name ?? "ログインしてください"}</p>
+              <p className="text-xs text-muted-foreground">{user?.email ?? ""}</p>
             </div>
           </Link>
         </DropdownMenuItem>
