@@ -1,3 +1,4 @@
+import { MoveToTop } from "@/components/move-to-top";
 import { CTASection } from "./_components/cta-section";
 import { FeaturesSection } from "./_components/features-section";
 import { Footer } from "./_components/footer";
@@ -17,6 +18,7 @@ export default function MarketingPage() {
       <FeaturesSection />
       <CTASection />
       <Footer />
+      <MoveToTop />
     </div>
   );
 }
