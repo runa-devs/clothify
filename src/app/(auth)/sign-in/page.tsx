@@ -1,7 +1,5 @@
-import { auth } from "@/lib/auth";
 import { type Metadata } from "next";
 import Image from "next/image";
-import { redirect, RedirectType } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,18 +19,13 @@ interface SignUpPageProps {
 }
 
 export default async function SignUpPage({ searchParams }: SignUpPageProps) {
-  const session = await auth();
-  if (session) {
-    redirect("/try-on", RedirectType.replace);
-  }
-
   const { callbackUrl } = await searchParams;
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <Card className="container w-full max-w-[400px]">
         <CardHeader className="space-y-1">
           <div className="mb-1 flex items-center justify-center">
-            <Image src="/logo.svg" alt="Logo" width={96} height={96} className="mr-2" />
+            <Image src="/logo.svg" alt="Logo" width={96} height={96} className="mr-2 dark:invert" />
           </div>
           <CardTitle className="text-center text-2xl font-bold">ログイン</CardTitle>
           <CardDescription className="text-center">以下の情報を利用してログイン</CardDescription>
