@@ -1,3 +1,4 @@
+import { ClothingSelector } from "@/app/(marketing)/_components/clothing-selector";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
@@ -34,19 +35,14 @@ export const HeroSection = () => {
         </div>
       </div>
 
-      {/* virtual try-on preview */}
-      <div className="relative mt-12 w-full max-w-4xl">
-        <div className="absolute -right-4 -top-4 z-50 rounded-full bg-chart-5/20 p-2 shadow-md">
+      {/* Virtual Try-On Experience */}
+      <div className="relative mt-12 w-full max-w-6xl">
+        <div className="absolute -right-4 -top-4 -z-50 rounded-full bg-chart-5/20 p-2 shadow-md">
           <Sparkles className="size-6 text-chart-5" />
         </div>
         <div className="overflow-hidden rounded-xl border border-border bg-card shadow-xl">
-          <div className="aspect-video w-full bg-gradient-to-r from-chart-2/10 to-chart-4/10 p-4">
-            <div className="flex h-full items-center justify-center">
-              <div className="text-center">
-                <Sparkles className="mx-auto size-12 text-chart-2" />
-                <p className="mt-4 text-lg font-medium text-card-foreground">バーチャル試着体験</p>
-              </div>
-            </div>
+          <div className="p-6">
+            <ClothingSelector />
           </div>
         </div>
       </div>
