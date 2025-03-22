@@ -22,7 +22,7 @@ export const ItemGrid = ({ selectedItem, onItemSelect, className }: ItemGridProp
   return (
     <div className={cn("flex-1 space-y-4 p-2", className)}>
       <div className="flex flex-col items-center justify-between gap-2">
-        <div className="hidden flex-wrap gap-2 lg:flex">
+        <div className="flex flex-wrap gap-2">
           <Button
             size="sm"
             variant={filter === null ? "default" : "outline"}

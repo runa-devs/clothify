@@ -1,5 +1,6 @@
 "use client";
 
+import { clothingItems } from "@/components/clothing-items";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -12,6 +13,8 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Plus } from "lucide-react";
+import Image from "next/image";
 import { ItemGrid } from "./item-grid";
 
 interface ItemSelectionCardProps {
@@ -38,7 +41,30 @@ export const ItemSelectionCard = ({
       <CardContent className="space-y-4 pb-6">
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
           <DrawerTrigger asChild>
-            <Button className="w-full">アイテムを選択</Button>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <div className="flex items-center justify-center rounded-md bg-muted p-3">
+                {selectedItem ? (
+                  <Image
+                    src={clothingItems[selectedItem].sourceImage}
+                    alt={clothingItems[selectedItem].name}
+                    width={300}
+                    height={400}
+                    className="rounded-md"
+                  />
+                ) : (
+                  <div className="flex size-10 items-center justify-center rounded-full bg-muted">
+                    <Plus className="size-4" />
+                  </div>
+                )}
+              </div>
+              {selectedItem && (
+                <div className="flex justify-center">
+                  <Button variant="secondary" className="w-full">
+                    別のアイテムを選択
+                  </Button>
+                </div>
+              )}
+            </div>
           </DrawerTrigger>
           <DrawerContent>
             <DrawerHeader>
