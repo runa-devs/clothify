@@ -11,6 +11,54 @@ import { ProgressBar } from "../_components/progress-bar";
 import { ResultCard } from "../_components/result-card";
 import { UploadCard } from "../_components/upload-card";
 
+// サンプルアイテムデータ（ItemGridコンポーネントのデータと同じ）
+const sampleItems = [
+  // トップス
+  {
+    id: 1,
+    name: "カジュアルTシャツ",
+    sourceImage: "/samples/source/tops/1.jpg",
+    unprocessedImage: "/samples/unprocessed/tops/1.jpg",
+    processedImage: "/samples/processed/tops/1.png",
+    type: "トップス",
+  },
+  {
+    id: 2,
+    name: "スタイリッシュシャツ",
+    sourceImage: "/samples/source/tops/2.jpg",
+    unprocessedImage: "/samples/unprocessed/tops/2.jpg",
+    processedImage: "/samples/processed/tops/2.png",
+    type: "トップス",
+  },
+  // パンツ
+  {
+    id: 6,
+    name: "デニムパンツ",
+    sourceImage: "/samples/source/pants/1.jpg",
+    unprocessedImage: "/samples/unprocessed/pants/1.webp",
+    processedImage: "/samples/processed/pants/1.png",
+    type: "パンツ",
+  },
+  // 帽子
+  {
+    id: 11,
+    name: "ベースボールキャップ",
+    sourceImage: "/samples/source/hat/1.jpg",
+    unprocessedImage: "/samples/unprocessed/hat/1.jpg",
+    processedImage: "/samples/processed/hat/1.png",
+    type: "帽子",
+  },
+  // メガネ
+  {
+    id: 16,
+    name: "ラウンドフレーム",
+    sourceImage: "/samples/source/glasses/1.jpg",
+    unprocessedImage: "/samples/unprocessed/glasses/1.jpg",
+    processedImage: "/samples/processed/glasses/1.png",
+    type: "メガネ",
+  },
+];
+
 export default function TryOnPage() {
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -18,6 +66,7 @@ export default function TryOnPage() {
   const [isMobile, setIsMobile] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<number | null>(null);
+  const [selectedItemData, setSelectedItemData] = useState<(typeof sampleItems)[0] | null>(null);
 
   // Check if window width is mobile size
   useEffect(() => {
@@ -47,10 +96,14 @@ export default function TryOnPage() {
 
   const handleItemSelect = (index: number) => {
     setSelectedItem(index);
+    // 選択されたアイテムのデータを取得
+    const selectedData = sampleItems.find((item) => item.id === index) || null;
+    setSelectedItemData(selectedData);
   };
 
   const clearSelection = () => {
     setSelectedItem(null);
+    setSelectedItemData(null);
   };
 
   return (
@@ -91,6 +144,10 @@ export default function TryOnPage() {
               <ResultCard
                 onTryAnother={() => setStep(2)}
                 onGoToProduct={() => console.log("Navigate to product page")}
+                beforeImage={selectedItemData?.unprocessedImage}
+                afterImage={selectedItemData?.processedImage}
+                itemName={selectedItemData?.name}
+                itemType={selectedItemData?.type}
               />
             )}
           </div>
