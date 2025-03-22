@@ -16,7 +16,7 @@ const clothingItems = [
     name: "カジュアルTシャツ",
     sourceImage: "/samples/source/tops/1.jpg",
     unprocessedImage: "/samples/unprocessed/tops/1.jpg",
-    processedImage: "/samples/processed/tops/1.jpg",
+    processedImage: "/samples/processed/tops/1.png",
     type: "トップス",
   },
   {
@@ -24,7 +24,7 @@ const clothingItems = [
     name: "スタイリッシュシャツ",
     sourceImage: "/samples/source/tops/2.jpg",
     unprocessedImage: "/samples/unprocessed/tops/2.jpg",
-    processedImage: "/samples/processed/tops/2.jpg",
+    processedImage: "/samples/processed/tops/2.png",
     type: "トップス",
   },
   {
@@ -32,7 +32,7 @@ const clothingItems = [
     name: "パーカー",
     sourceImage: "/samples/source/tops/3.jpg",
     unprocessedImage: "/samples/unprocessed/tops/3.jpg",
-    processedImage: "/samples/processed/tops/3.jpg",
+    processedImage: "/samples/processed/tops/3.png",
     type: "トップス",
   },
   {
@@ -40,7 +40,7 @@ const clothingItems = [
     name: "ニットセーター",
     sourceImage: "/samples/source/tops/4.jpg",
     unprocessedImage: "/samples/unprocessed/tops/4.jpg",
-    processedImage: "/samples/processed/tops/4.jpg",
+    processedImage: "/samples/processed/tops/4.png",
     type: "トップス",
   },
   {
@@ -48,7 +48,7 @@ const clothingItems = [
     name: "ブラウス",
     sourceImage: "/samples/source/tops/5.jpg",
     unprocessedImage: "/samples/unprocessed/tops/5.jpg",
-    processedImage: "/samples/processed/tops/5.jpg",
+    processedImage: "/samples/processed/tops/5.png",
     type: "トップス",
   },
 
@@ -57,8 +57,8 @@ const clothingItems = [
     id: 6,
     name: "デニムパンツ",
     sourceImage: "/samples/source/pants/1.jpg",
-    unprocessedImage: "/samples/unprocessed/pants/1.jpg",
-    processedImage: "/samples/processed/pants/1.jpg",
+    unprocessedImage: "/samples/unprocessed/pants/1.webp",
+    processedImage: "/samples/processed/pants/1.png",
     type: "パンツ",
   },
   {
@@ -66,7 +66,7 @@ const clothingItems = [
     name: "スラックス",
     sourceImage: "/samples/source/pants/2.jpg",
     unprocessedImage: "/samples/unprocessed/pants/2.jpg",
-    processedImage: "/samples/processed/pants/2.jpg",
+    processedImage: "/samples/processed/pants/2.png",
     type: "パンツ",
   },
   {
@@ -74,7 +74,7 @@ const clothingItems = [
     name: "チノパン",
     sourceImage: "/samples/source/pants/3.jpg",
     unprocessedImage: "/samples/unprocessed/pants/3.jpg",
-    processedImage: "/samples/processed/pants/3.jpg",
+    processedImage: "/samples/processed/pants/3.png",
     type: "パンツ",
   },
   {
@@ -82,7 +82,7 @@ const clothingItems = [
     name: "ワイドパンツ",
     sourceImage: "/samples/source/pants/4.jpg",
     unprocessedImage: "/samples/unprocessed/pants/4.jpg",
-    processedImage: "/samples/processed/pants/4.jpg",
+    processedImage: "/samples/processed/pants/4.png",
     type: "パンツ",
   },
   {
@@ -90,7 +90,7 @@ const clothingItems = [
     name: "スキニーパンツ",
     sourceImage: "/samples/source/pants/5.jpg",
     unprocessedImage: "/samples/unprocessed/pants/5.jpg",
-    processedImage: "/samples/processed/pants/5.jpg",
+    processedImage: "/samples/processed/pants/5.png",
     type: "パンツ",
   },
 
@@ -100,7 +100,7 @@ const clothingItems = [
     name: "ベースボールキャップ",
     sourceImage: "/samples/source/hat/1.jpg",
     unprocessedImage: "/samples/unprocessed/hat/1.jpg",
-    processedImage: "/samples/processed/hat/1.jpg",
+    processedImage: "/samples/processed/hat/1.png",
     type: "帽子",
   },
   {
@@ -108,7 +108,7 @@ const clothingItems = [
     name: "ニット帽",
     sourceImage: "/samples/source/hat/2.jpg",
     unprocessedImage: "/samples/unprocessed/hat/2.jpg",
-    processedImage: "/samples/processed/hat/2.jpg",
+    processedImage: "/samples/processed/hat/2.png",
     type: "帽子",
   },
   {
@@ -116,7 +116,7 @@ const clothingItems = [
     name: "バケットハット",
     sourceImage: "/samples/source/hat/3.jpg",
     unprocessedImage: "/samples/unprocessed/hat/3.jpg",
-    processedImage: "/samples/processed/hat/3.jpg",
+    processedImage: "/samples/processed/hat/3.png",
     type: "帽子",
   },
   {
@@ -124,7 +124,7 @@ const clothingItems = [
     name: "フェドラハット",
     sourceImage: "/samples/source/hat/4.jpg",
     unprocessedImage: "/samples/unprocessed/hat/4.jpg",
-    processedImage: "/samples/processed/hat/4.jpg",
+    processedImage: "/samples/processed/hat/4.png",
     type: "帽子",
   },
   {
@@ -132,7 +132,7 @@ const clothingItems = [
     name: "ストローハット",
     sourceImage: "/samples/source/hat/5.jpg",
     unprocessedImage: "/samples/unprocessed/hat/5.jpg",
-    processedImage: "/samples/processed/hat/5.jpg",
+    processedImage: "/samples/processed/hat/5.png",
     type: "帽子",
   },
 
@@ -142,7 +142,7 @@ const clothingItems = [
     name: "ラウンドフレーム",
     sourceImage: "/samples/source/glasses/1.jpg",
     unprocessedImage: "/samples/unprocessed/glasses/1.jpg",
-    processedImage: "/samples/processed/glasses/1.jpg",
+    processedImage: "/samples/processed/glasses/1.png",
     type: "メガネ",
   },
   {
@@ -150,7 +150,7 @@ const clothingItems = [
     name: "スクエアフレーム",
     sourceImage: "/samples/source/glasses/2.jpg",
     unprocessedImage: "/samples/unprocessed/glasses/2.jpg",
-    processedImage: "/samples/processed/glasses/2.jpg",
+    processedImage: "/samples/processed/glasses/2.png",
     type: "メガネ",
   },
   {
@@ -158,7 +158,7 @@ const clothingItems = [
     name: "オーバルフレーム",
     sourceImage: "/samples/source/glasses/3.jpg",
     unprocessedImage: "/samples/unprocessed/glasses/3.jpg",
-    processedImage: "/samples/processed/glasses/3.jpg",
+    processedImage: "/samples/processed/glasses/3.png",
     type: "メガネ",
   },
   {
@@ -166,15 +166,7 @@ const clothingItems = [
     name: "ボストンフレーム",
     sourceImage: "/samples/source/glasses/4.jpg",
     unprocessedImage: "/samples/unprocessed/glasses/4.jpg",
-    processedImage: "/samples/processed/glasses/4.jpg",
-    type: "メガネ",
-  },
-  {
-    id: 20,
-    name: "ウェリントンフレーム",
-    sourceImage: "/samples/source/glasses/5.jpg",
-    unprocessedImage: "/samples/unprocessed/glasses/5.jpg",
-    processedImage: "/samples/processed/glasses/5.jpg",
+    processedImage: "/samples/processed/glasses/4.png",
     type: "メガネ",
   },
 ];
