@@ -17,7 +17,7 @@ export const CTASection = () => {
           size="lg"
           className="gap-2 bg-background text-foreground hover:bg-background/90"
         >
-          <Link href="/dashboard">
+          <Link href="/try-on">
             無料で始める <ArrowRight className="size-4" />
           </Link>
         </Button>

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useScroll } from "@/hooks/use-scroll";
 import { Menu, X } from "lucide-react";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -11,6 +12,11 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isScrolled = useScroll();
 
+  const handleSignIn = () => {
+    setIsMenuOpen(false);
+    signIn("google");
+  };
+
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-300 ${
@@ -18,15 +24,16 @@ export const Header = () => {
       }`}
     >
       <div className="container mx-auto flex h-16 max-w-5xl items-center justify-between px-4 md:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo.svg" className="dark:invert" alt="Clothify" width={96} height={96} />
+        <Link href="/" className="flex items-center justify-center gap-2">
+          <Image src="/logo.svg" className="dark:invert" alt="Clothify" height={96} width={96} />
+          <span className="rounded-full bg-yellow-500 px-2 py-0.5 text-sm font-bold">Demo</span>
         </Link>
 
         <div className="flex items-center gap-4">
-          <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
-            <Link href="/login">ログイン</Link>
+          <Button variant="ghost" size="sm" onClick={handleSignIn}>
+            ログイン
           </Button>
-          <Button asChild size="sm" className="hidden md:inline-flex">
+          <Button asChild size="sm">
             <Link href="/try-on">無料で始める</Link>
           </Button>
           <Button
@@ -67,13 +74,11 @@ export const Header = () => {
                 よくある質問
               </Link>
               <div className="flex flex-col gap-2 pt-2">
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                    ログイン
-                  </Link>
+                <Button asChild variant="ghost" size="sm" onClick={handleSignIn}>
+                  ログイン
                 </Button>
                 <Button asChild size="sm">
-                  <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/try-on" onClick={() => setIsMenuOpen(false)}>
                     無料で始める
                   </Link>
                 </Button>

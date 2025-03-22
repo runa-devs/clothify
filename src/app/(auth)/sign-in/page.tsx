@@ -40,9 +40,15 @@ export default async function SignUpPage({ searchParams }: SignUpPageProps) {
                   await signIn(provider.id, { redirectTo: callbackUrl ?? "" });
                 }}
               >
-                <Button variant="outline" className="w-full">
+                <Button variant="secondary" className="w-full">
                   {provider.icon && (
-                    <Image src={provider.icon} alt={provider.name} width={20} height={20} />
+                    <Image
+                      className={`${provider.id === "github" ? "invert" : ""}`}
+                      src={provider.icon}
+                      alt={provider.name}
+                      width={20}
+                      height={20}
+                    />
                   )}
                   {provider.name}でログイン
                 </Button>
