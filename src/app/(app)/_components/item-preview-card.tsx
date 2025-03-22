@@ -1,5 +1,6 @@
 "use client";
 
+import { sampleItems } from "@/app/(app)/_components/item-grid";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,18 +10,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Image from "next/image";
 
 interface ItemPreviewCardProps {
-  selectedItem: number | null;
+  selectedItemIndex: number | null;
   onClearSelection: () => void;
   onProcess: () => void;
 }
 
 export const ItemPreviewCard = ({
-  selectedItem,
+  selectedItemIndex,
   onClearSelection,
   onProcess,
 }: ItemPreviewCardProps) => {
+  const selectedItem = sampleItems.find((item) => item.id === selectedItemIndex);
+  console.log(selectedItem);
+  console.log(selectedItemIndex);
   return (
     <Card className="shadow-sm">
       <CardHeader className="pb-4">
@@ -28,12 +33,15 @@ export const ItemPreviewCard = ({
         <CardDescription>右側のパネルからお好みのアイテムを選択してください</CardDescription>
       </CardHeader>
       <CardContent className="pb-4">
-        <div className="flex aspect-[3/4] items-center justify-center rounded-lg bg-muted">
-          {selectedItem !== null ? (
-            <div className="text-center">
-              <p className="font-medium">アイテム {selectedItem + 1}</p>
-              <p className="text-sm text-muted-foreground">選択済み</p>
-            </div>
+        <div className="flex aspect-[3/4] items-center justify-center rounded-lg bg-muted p-4">
+          {!!selectedItemIndex ? (
+            <Image
+              src={selectedItem?.sourceImage ?? ""}
+              alt={selectedItem?.name ?? ""}
+              width={300}
+              height={400}
+              className="size-full rounded-md object-cover"
+            />
           ) : (
             <div className="flex flex-col items-center justify-center">
               <p className="text-muted-foreground">
@@ -50,11 +58,11 @@ export const ItemPreviewCard = ({
           variant="outline"
           onClick={onClearSelection}
           className="flex-1"
-          disabled={selectedItem === null}
+          disabled={selectedItemIndex === null}
         >
           選択をクリア
         </Button>
-        <Button className="flex-1" onClick={onProcess} disabled={selectedItem === null}>
+        <Button className="flex-1" onClick={onProcess} disabled={selectedItemIndex === null}>
           試着する
         </Button>
       </CardFooter>

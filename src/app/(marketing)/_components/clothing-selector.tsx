@@ -269,7 +269,7 @@ export const ClothingSelector = ({ className }: ClothingSelectorProps) => {
           </div>
         </div>
 
-        <div className="grid max-h-[400px] grid-cols-2 gap-3 overflow-y-auto pr-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid max-h-[400px] grid-cols-2 gap-3 overflow-y-auto pr-2 md:max-h-[500px] md:grid-cols-3 lg:grid-cols-4">
           {filteredItems.map((item) => (
             <Card
               key={item.id}

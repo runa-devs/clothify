@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 // サンプル商品データ
-const sampleItems = [
+export const sampleItems = [
   // カテゴリー1
   {
     id: 1,
@@ -191,9 +191,8 @@ export const ItemGrid = ({
   const filteredItems = filter ? limitedItems.filter((item) => item.type === filter) : limitedItems;
 
   return (
-    <div className={cn("flex-1 space-y-4", className)}>
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium">アイテムを選択</h3>
+    <div className={cn("flex-1 space-y-4 p-2", className)}>
+      <div className="flex flex-col items-center justify-between gap-2">
         <div className="hidden flex-wrap gap-2 lg:flex">
           <Button
             size="sm"

@@ -9,7 +9,7 @@ interface ProcessingCardProps {
 
 export const ProcessingCard = ({ progress }: ProcessingCardProps) => {
   return (
-    <Card className="shadow-sm">
+    <Card className="mt-3 shadow-sm">
       <CardHeader className="pb-4">
         <CardTitle>画像を生成中...</CardTitle>
         <CardDescription>高品質な試着プレビューを生成しています</CardDescription>

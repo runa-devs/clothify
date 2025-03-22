@@ -132,7 +132,7 @@ export default function TryOnPage() {
 
             {step === 2 && !isMobile && (
               <ItemPreviewCard
-                selectedItem={selectedItem}
+                selectedItemIndex={selectedItem}
                 onClearSelection={clearSelection}
                 onProcess={processImage}
               />
