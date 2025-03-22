@@ -33,7 +33,7 @@ export const Header = () => {
           <Button variant="ghost" size="sm" onClick={handleSignIn}>
             ログイン
           </Button>
-          <Button asChild size="sm">
+          <Button asChild size="sm" className="hidden md:flex">
             <Link href="/try-on">無料で始める</Link>
           </Button>
           <Button
