@@ -1,6 +1,6 @@
 "use client";
 
-import { sampleItems } from "@/app/(app)/_components/item-grid";
+import { clothingItems } from "@/components/clothing-items";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,9 +23,7 @@ export const ItemPreviewCard = ({
   onClearSelection,
   onProcess,
 }: ItemPreviewCardProps) => {
-  const selectedItem = sampleItems.find((item) => item.id === selectedItemIndex);
-  console.log(selectedItem);
-  console.log(selectedItemIndex);
+  const selectedItem = clothingItems.find((item) => item.id === selectedItemIndex);
   return (
     <Card className="shadow-sm">
       <CardHeader className="pb-4">
@@ -38,6 +36,7 @@ export const ItemPreviewCard = ({
             <Image
               src={selectedItem?.sourceImage ?? ""}
               alt={selectedItem?.name ?? ""}
+              layout="responsive"
               width={300}
               height={400}
               className="size-full rounded-md object-cover"

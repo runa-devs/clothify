@@ -1,5 +1,6 @@
 "use client";
 
+import { clothingItems } from "@/components/clothing-items";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -7,188 +8,16 @@ import { Sparkles } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
-// サンプル商品データ
-export const sampleItems = [
-  // カテゴリー1
-  {
-    id: 1,
-    name: "カジュアルTシャツ",
-    sourceImage: "/samples/source/tops/1.jpg",
-    unprocessedImage: "/samples/unprocessed/tops/1.jpg",
-    processedImage: "/samples/processed/tops/1.png",
-    type: "トップス",
-  },
-  {
-    id: 2,
-    name: "スタイリッシュシャツ",
-    sourceImage: "/samples/source/tops/2.jpg",
-    unprocessedImage: "/samples/unprocessed/tops/2.jpg",
-    processedImage: "/samples/processed/tops/2.png",
-    type: "トップス",
-  },
-  {
-    id: 3,
-    name: "パーカー",
-    sourceImage: "/samples/source/tops/3.jpg",
-    unprocessedImage: "/samples/unprocessed/tops/3.jpg",
-    processedImage: "/samples/processed/tops/3.png",
-    type: "トップス",
-  },
-  {
-    id: 4,
-    name: "ニットセーター",
-    sourceImage: "/samples/source/tops/4.jpg",
-    unprocessedImage: "/samples/unprocessed/tops/4.jpg",
-    processedImage: "/samples/processed/tops/4.png",
-    type: "トップス",
-  },
-  {
-    id: 5,
-    name: "ブラウス",
-    sourceImage: "/samples/source/tops/5.jpg",
-    unprocessedImage: "/samples/unprocessed/tops/5.jpg",
-    processedImage: "/samples/processed/tops/5.png",
-    type: "トップス",
-  },
-
-  // パンツ
-  {
-    id: 6,
-    name: "デニムパンツ",
-    sourceImage: "/samples/source/pants/1.jpg",
-    unprocessedImage: "/samples/unprocessed/pants/1.webp",
-    processedImage: "/samples/processed/pants/1.png",
-    type: "パンツ",
-  },
-  {
-    id: 7,
-    name: "スラックス",
-    sourceImage: "/samples/source/pants/2.jpg",
-    unprocessedImage: "/samples/unprocessed/pants/2.jpg",
-    processedImage: "/samples/processed/pants/2.png",
-    type: "パンツ",
-  },
-  {
-    id: 8,
-    name: "チノパン",
-    sourceImage: "/samples/source/pants/3.jpg",
-    unprocessedImage: "/samples/unprocessed/pants/3.jpg",
-    processedImage: "/samples/processed/pants/3.png",
-    type: "パンツ",
-  },
-  {
-    id: 9,
-    name: "ワイドパンツ",
-    sourceImage: "/samples/source/pants/4.jpg",
-    unprocessedImage: "/samples/unprocessed/pants/4.jpg",
-    processedImage: "/samples/processed/pants/4.png",
-    type: "パンツ",
-  },
-  {
-    id: 10,
-    name: "スキニーパンツ",
-    sourceImage: "/samples/source/pants/5.jpg",
-    unprocessedImage: "/samples/unprocessed/pants/5.jpg",
-    processedImage: "/samples/processed/pants/5.png",
-    type: "パンツ",
-  },
-
-  // 帽子
-  {
-    id: 11,
-    name: "ベースボールキャップ",
-    sourceImage: "/samples/source/hat/1.jpg",
-    unprocessedImage: "/samples/unprocessed/hat/1.jpg",
-    processedImage: "/samples/processed/hat/1.png",
-    type: "帽子",
-  },
-  {
-    id: 12,
-    name: "ニット帽",
-    sourceImage: "/samples/source/hat/2.jpg",
-    unprocessedImage: "/samples/unprocessed/hat/2.jpg",
-    processedImage: "/samples/processed/hat/2.png",
-    type: "帽子",
-  },
-  {
-    id: 13,
-    name: "バケットハット",
-    sourceImage: "/samples/source/hat/3.jpg",
-    unprocessedImage: "/samples/unprocessed/hat/3.jpg",
-    processedImage: "/samples/processed/hat/3.png",
-    type: "帽子",
-  },
-  {
-    id: 14,
-    name: "フェドラハット",
-    sourceImage: "/samples/source/hat/4.jpg",
-    unprocessedImage: "/samples/unprocessed/hat/4.jpg",
-    processedImage: "/samples/processed/hat/4.png",
-    type: "帽子",
-  },
-  {
-    id: 15,
-    name: "ストローハット",
-    sourceImage: "/samples/source/hat/5.jpg",
-    unprocessedImage: "/samples/unprocessed/hat/5.jpg",
-    processedImage: "/samples/processed/hat/5.png",
-    type: "帽子",
-  },
-
-  // メガネ
-  {
-    id: 16,
-    name: "ラウンドフレーム",
-    sourceImage: "/samples/source/glasses/1.jpg",
-    unprocessedImage: "/samples/unprocessed/glasses/1.jpg",
-    processedImage: "/samples/processed/glasses/1.png",
-    type: "メガネ",
-  },
-  {
-    id: 17,
-    name: "スクエアフレーム",
-    sourceImage: "/samples/source/glasses/2.jpg",
-    unprocessedImage: "/samples/unprocessed/glasses/2.jpg",
-    processedImage: "/samples/processed/glasses/2.png",
-    type: "メガネ",
-  },
-  {
-    id: 18,
-    name: "オーバルフレーム",
-    sourceImage: "/samples/source/glasses/3.jpg",
-    unprocessedImage: "/samples/unprocessed/glasses/3.jpg",
-    processedImage: "/samples/processed/glasses/3.png",
-    type: "メガネ",
-  },
-  {
-    id: 19,
-    name: "ボストンフレーム",
-    sourceImage: "/samples/source/glasses/4.jpg",
-    unprocessedImage: "/samples/unprocessed/glasses/4.jpg",
-    processedImage: "/samples/processed/glasses/4.png",
-    type: "メガネ",
-  },
-];
-
 interface ItemGridProps {
   selectedItem: number | null;
   onItemSelect: (id: number) => void;
-  itemCount?: number;
   className?: string;
 }
 
-export const ItemGrid = ({
-  selectedItem,
-  onItemSelect,
-  itemCount = 8,
-  className,
-}: ItemGridProps) => {
+export const ItemGrid = ({ selectedItem, onItemSelect, className }: ItemGridProps) => {
   const [filter, setFilter] = useState<string | null>(null);
 
-  // 表示するアイテム数を制限
-  const limitedItems = sampleItems.slice(0, itemCount);
-
-  const filteredItems = filter ? limitedItems.filter((item) => item.type === filter) : limitedItems;
+  const filteredItems = clothingItems.filter((item) => item.type === filter || !filter);
 
   return (
     <div className={cn("flex-1 space-y-4 p-2", className)}>
