@@ -33,14 +33,14 @@ export const ItemPreviewCard = ({
       <CardContent className="pb-4">
         <div className="flex aspect-[3/4] items-center justify-center rounded-lg bg-muted p-4">
           {!!selectedItemIndex ? (
-            <Image
-              src={selectedItem?.sourceImage ?? ""}
-              alt={selectedItem?.name ?? ""}
-              layout="responsive"
-              width={300}
-              height={400}
-              className="size-full rounded-md object-cover"
-            />
+            <div className="relative size-full">
+              <Image
+                src={selectedItem?.sourceImage ?? ""}
+                alt={selectedItem?.name ?? ""}
+                fill
+                className="object-contain"
+              />
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center">
               <p className="text-muted-foreground">

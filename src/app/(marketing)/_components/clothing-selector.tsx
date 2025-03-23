@@ -27,8 +27,16 @@ export const ClothingSelector = ({ className }: ClothingSelectorProps) => {
       <div className="flex-1">
         <div className="mx-auto max-w-md">
           <BeforeAfterSlider
-            beforeImage={selectedClothing ? selectedClothing.unprocessedImage : "/sample1.jpg"}
-            afterImage={selectedClothing ? selectedClothing.processedImage : "/sample2.jpg"}
+            beforeImage={
+              selectedClothing
+                ? selectedClothing.unprocessedImage
+                : "/samples/unprocessed/tops/4.jpg"
+            }
+            afterImage={
+              selectedClothing
+                ? selectedClothing.processedImage
+                : "/samples/processed/tops/giiku1.png"
+            }
           />
           {selectedClothing && (
             <div className="mt-3 flex items-center justify-between rounded-lg border border-border bg-muted/30 p-2 text-sm">

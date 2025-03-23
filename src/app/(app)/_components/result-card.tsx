@@ -15,7 +15,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Facebook, Share2, Twitter } from "lucide-react";
+import { Facebook, Share2, Star, StarHalf, Truck, Twitter } from "lucide-react";
+import { useEffect } from "react";
 import { BeforeAfterSlider } from "../../(marketing)/_components/before-after-slider";
 
 interface ResultCardProps {
@@ -35,6 +36,16 @@ export const ResultCard = ({
   itemName = "カジュアルTシャツ",
   itemType = "トップス",
 }: ResultCardProps) => {
+  // 結果表示時に選択中のアイテム情報をコンソールに表示
+  useEffect(() => {
+    console.log("ResultCard - 表示アイテム:", {
+      itemName,
+      itemType,
+      beforeImage,
+      afterImage,
+    });
+  }, [itemName, itemType, beforeImage, afterImage]);
+
   const shareOnTwitter = () => {
     const text = `${itemName}をClothifyでバーチャル試着してみました！`;
     const url = window.location.href;
@@ -82,11 +93,51 @@ export const ResultCard = ({
       <CardContent className="pb-4">
         <div className="mx-auto max-w-md">
           <BeforeAfterSlider beforeImage={beforeImage} afterImage={afterImage} />
-          <div className="mt-3 flex items-center justify-between rounded-lg border border-border bg-muted/30 p-2 text-sm">
-            <div className="flex items-center gap-2">
-              <div>
-                <p className="font-medium">{itemName}</p>
-                <p className="text-xs text-muted-foreground">{itemType}</p>
+          <div className="mt-3 space-y-2">
+            <div className="flex items-center justify-between rounded-lg border border-border bg-muted/30 p-2 text-sm">
+              <div className="flex items-center gap-2">
+                <div>
+                  <p className="font-medium">{itemName}</p>
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <span>{itemType}</span>
+                    <span className="mx-1">•</span>
+                    <div className="flex items-center text-yellow-500">
+                      <Star className="size-3 fill-current" />
+                      <Star className="size-3 fill-current" />
+                      <Star className="size-3 fill-current" />
+                      <Star className="size-3 fill-current" />
+                      <StarHalf className="size-3 fill-current" />
+                      <span className="ml-1 text-muted-foreground">(4.5)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="flex items-center justify-end gap-1">
+                  <p className="font-medium text-primary">¥5,980</p>
+                  <span className="rounded-full border border-border px-2 py-0.5 text-[10px]">
+                    送料無料
+                  </span>
+                </div>
+                <div className="flex items-center justify-end gap-1 text-xs text-muted-foreground">
+                  <Truck className="size-3" />
+                  <span>即日発送 • 在庫あり</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-border bg-muted/30 p-2 text-xs">
+              <div className="mb-1.5 flex justify-between">
+                <span className="font-medium">カラー</span>
+                <span className="text-muted-foreground">3色展開</span>
+              </div>
+              <div className="flex gap-1">
+                <div className="size-5 rounded-full border border-border bg-black"></div>
+                <div className="size-5 rounded-full border border-border bg-white"></div>
+                <div className="size-5 rounded-full border border-border bg-blue-500"></div>
+              </div>
+              <div className="mt-2 text-[11px] text-muted-foreground">
+                この30分で12人がこの商品を購入しました
               </div>
             </div>
           </div>
@@ -96,7 +147,13 @@ export const ResultCard = ({
         <Button variant="outline" onClick={onTryAnother} className="flex-1">
           別のアイテムを試す
         </Button>
-        <Button className="flex-1" onClick={onGoToProduct}>
+        <Button
+          className="flex-1 bg-primary transition-colors hover:bg-primary/90"
+          onClick={() => {
+            console.log(`商品「${itemName}」の商品ページへ移動します`);
+            onGoToProduct?.();
+          }}
+        >
           商品ページへ
         </Button>
       </CardFooter>

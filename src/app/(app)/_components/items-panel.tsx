@@ -42,7 +42,7 @@ export const ItemsPanel = ({
         </ScrollArea>
       </CardContent>
       <CardFooter className="pb-6">
-        <Button onClick={onProcess} className="w-full" disabled={selectedItem === null}>
+        <Button onClick={onProcess} className="hidden w-full" disabled={selectedItem === null}>
           選択したアイテムで試着
         </Button>
       </CardFooter>

@@ -4,7 +4,6 @@ import { clothingItems } from "@/components/clothing-items";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Sparkles } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -82,11 +81,6 @@ export const ItemGrid = ({ selectedItem, onItemSelect, className }: ItemGridProp
                   <Image src={item.sourceImage} alt={item.name} fill className="object-contain" />
                 ) : (
                   <div className="aspect-square rounded-md bg-muted" />
-                )}
-                {selectedItem === item.id && (
-                  <div className="absolute right-1 top-1 rounded-full bg-primary p-1 shadow-md">
-                    <Sparkles className="size-3 text-white" />
-                  </div>
                 )}
               </div>
               <p className="mt-2 text-xs font-medium">{item.name}</p>

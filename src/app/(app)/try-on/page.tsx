@@ -1,6 +1,9 @@
 "use client";
 
+import { clothingItems } from "@/components/clothing-items";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AboutCard } from "../_components/about-card";
 import { ItemPreviewCard } from "../_components/item-preview-card";
@@ -12,52 +15,7 @@ import { ResultCard } from "../_components/result-card";
 import { UploadCard } from "../_components/upload-card";
 
 // サンプルアイテムデータ（ItemGridコンポーネントのデータと同じ）
-const sampleItems = [
-  // トップス
-  {
-    id: 1,
-    name: "カジュアルTシャツ",
-    sourceImage: "/samples/source/tops/1.jpg",
-    unprocessedImage: "/samples/unprocessed/tops/1.jpg",
-    processedImage: "/samples/processed/tops/1.png",
-    type: "トップス",
-  },
-  {
-    id: 2,
-    name: "スタイリッシュシャツ",
-    sourceImage: "/samples/source/tops/2.jpg",
-    unprocessedImage: "/samples/unprocessed/tops/2.jpg",
-    processedImage: "/samples/processed/tops/2.png",
-    type: "トップス",
-  },
-  // パンツ
-  {
-    id: 6,
-    name: "デニムパンツ",
-    sourceImage: "/samples/source/pants/1.jpg",
-    unprocessedImage: "/samples/unprocessed/pants/1.webp",
-    processedImage: "/samples/processed/pants/1.png",
-    type: "パンツ",
-  },
-  // 帽子
-  {
-    id: 11,
-    name: "ベースボールキャップ",
-    sourceImage: "/samples/source/hat/1.jpg",
-    unprocessedImage: "/samples/unprocessed/hat/1.jpg",
-    processedImage: "/samples/processed/hat/1.png",
-    type: "帽子",
-  },
-  // メガネ
-  {
-    id: 16,
-    name: "ラウンドフレーム",
-    sourceImage: "/samples/source/glasses/1.jpg",
-    unprocessedImage: "/samples/unprocessed/glasses/1.jpg",
-    processedImage: "/samples/processed/glasses/1.png",
-    type: "メガネ",
-  },
-];
+const sampleItems = clothingItems;
 
 export default function TryOnPage() {
   const [step, setStep] = useState(1);
@@ -82,6 +40,13 @@ export default function TryOnPage() {
     };
   }, []);
 
+  // 選択中のアイテムをコンソールに表示
+  useEffect(() => {
+    if (selectedItemData) {
+      console.log("選択中のアイテム:", selectedItemData);
+    }
+  }, [selectedItemData]);
+
   // Mock image processing
   const processImage = async () => {
     setIsProcessing(true);
@@ -92,6 +57,9 @@ export default function TryOnPage() {
     }
     setIsProcessing(false);
     setStep(3);
+
+    // 処理完了時に選択中のアイテムをコンソールに表示
+    console.log("処理完了したアイテム:", selectedItemData);
   };
 
   const handleItemSelect = (index: number) => {
@@ -99,6 +67,9 @@ export default function TryOnPage() {
     // 選択されたアイテムのデータを取得
     const selectedData = sampleItems.find((item) => item.id === index) || null;
     setSelectedItemData(selectedData);
+
+    // 選択されたアイテムをコンソールに表示
+    console.log(`アイテム選択: ID=${index}`, selectedData);
   };
 
   const clearSelection = () => {
@@ -143,7 +114,14 @@ export default function TryOnPage() {
             {step === 3 && !isProcessing && (
               <ResultCard
                 onTryAnother={() => setStep(2)}
-                onGoToProduct={() => console.log("Navigate to product page")}
+                onGoToProduct={() => {
+                  // 商品ページへ遷移
+                  if (selectedItemData) {
+                    console.log(`商品ページへ遷移: ${selectedItemData.name}`);
+                    // 実際の遷移処理（例: 商品IDに基づくページへの遷移）
+                    window.location.href = `/products/${selectedItemData.id}`;
+                  }
+                }}
                 beforeImage={selectedItemData?.unprocessedImage}
                 afterImage={selectedItemData?.processedImage}
                 itemName={selectedItemData?.name}
@@ -161,6 +139,68 @@ export default function TryOnPage() {
               onProcess={processImage}
               isMobile={isMobile}
             />
+          )}
+
+          {step === 3 && !isMobile && !isProcessing && (
+            <div className="space-y-6">
+              <Card className="shadow-sm">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">商品詳細</CardTitle>
+                </CardHeader>
+                <CardContent className="pb-3 text-sm">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="mb-1 font-medium">素材</h4>
+                      <p className="text-muted-foreground">綿100%、高品質な素材を使用</p>
+                    </div>
+                    <div>
+                      <h4 className="mb-1 font-medium">サイズ展開</h4>
+                      <div className="mt-1 flex gap-1">
+                        {["S", "M", "L", "XL"].map((size) => (
+                          <div
+                            key={size}
+                            className="flex size-8 cursor-pointer items-center justify-center rounded-md border border-border text-xs hover:bg-accent"
+                          >
+                            {size}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="mb-1 font-medium">商品説明</h4>
+                      <p className="text-muted-foreground">
+                        柔らかい肌触りで、カジュアルからスマートカジュアルまで幅広いシーンで活躍する一着。
+                        耐久性に優れた縫製を施し、洗濯による色落ちや縮みを最小限に抑えました。
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="shadow-sm">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">よく一緒に購入されている商品</CardTitle>
+                </CardHeader>
+                <CardContent className="pb-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    {sampleItems.slice(0, 4).map((item) => (
+                      <div key={item.id} className="cursor-pointer hover:opacity-80">
+                        <div className="relative mb-1 aspect-square w-full overflow-hidden rounded-md">
+                          <Image
+                            src={item.sourceImage}
+                            alt={item.name}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <p className="truncate text-xs font-medium">{item.name}</p>
+                        <p className="text-xs text-primary">¥4,290</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           )}
         </div>
       </div>
