@@ -11,6 +11,10 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     AUTH_GITHUB_ID: z.string().min(1),
     AUTH_GITHUB_SECRET: z.string().min(1),
+    S3_ACCESS_KEY: z.string().min(1),
+    S3_SECRET_KEY: z.string().min(1),
+    S3_BUCKET: z.string().min(1),
+    S3_ENDPOINT: z.string().min(1),
   },
   /**
    * Specify runtimeEnv manually for Next.js < 13.4.4
@@ -21,6 +25,10 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID,
     AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
+    S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
+    S3_SECRET_KEY: process.env.S3_SECRET_KEY,
+    S3_BUCKET: process.env.S3_BUCKET,
+    S3_ENDPOINT: process.env.S3_ENDPOINT,
   },
   /**
    * Skip validation of environment variables (useful for CI/CD)
