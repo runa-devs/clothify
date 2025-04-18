@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useScroll } from "@/hooks/use-scroll";
 import { Menu, X } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { useState } from "react";
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isScrolled = useScroll();
+  const { status } = useSession();
 
   const handleSignIn = () => {
     setIsMenuOpen(false);
@@ -30,12 +31,15 @@ export const Header = () => {
         </Link>
 
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" onClick={handleSignIn}>
-            ログイン
-          </Button>
-          <Button asChild size="sm" className="hidden md:flex">
-            <Link href="/try-on">無料で始める</Link>
-          </Button>
+          {status === "unauthenticated" ? (
+            <Button variant="ghost" size="sm" onClick={handleSignIn}>
+              ログイン
+            </Button>
+          ) : (
+            <Button asChild size="sm">
+              <Link href="/try-on">無料で始める</Link>
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="icon"
