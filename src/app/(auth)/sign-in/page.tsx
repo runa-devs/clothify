@@ -1,13 +1,13 @@
 import { type Metadata } from "next";
 import Image from "next/image";
 
-import { Button } from "@/components/ui/button";
+import { SocialSignInButton } from "@/components/auth/social-sign-in";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { signIn } from "@/lib/auth";
 import { providerMap } from "@/lib/auth/config";
 
 export const metadata: Metadata = {
-  title: "新規登録",
+  title: "ログイン",
   description: "新しいアカウントを作成してください",
 };
 
@@ -32,28 +32,19 @@ export default async function SignUpPage({ searchParams }: SignUpPageProps) {
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="flex flex-col gap-4">
-            {providerMap.map((provider) => (
-              <form
-                key={provider.id}
-                action={async () => {
-                  "use server";
-                  await signIn(provider.id, { redirectTo: callbackUrl ?? "" });
-                }}
-              >
-                <Button variant="secondary" className="w-full">
-                  {provider.icon && (
-                    <Image
-                      className={`${provider.id === "github" ? "invert" : ""}`}
-                      src={provider.icon}
-                      alt={provider.name}
-                      width={20}
-                      height={20}
-                    />
-                  )}
-                  {provider.name}でログイン
-                </Button>
-              </form>
-            ))}
+            {providerMap.map((provider) => {
+              async function handleSignIn(providerId: string) {
+                "use server";
+                await signIn(providerId, { redirectTo: callbackUrl ?? "" });
+              }
+              return (
+                <SocialSignInButton
+                  key={provider.id}
+                  provider={provider}
+                  signInAction={handleSignIn}
+                />
+              );
+            })}
           </div>
         </CardContent>
       </Card>

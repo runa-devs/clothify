@@ -1,6 +1,6 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
-import type { Provider } from "next-auth/providers";
+import type { Provider as NextAuthProvider } from "next-auth/providers";
 import Discord from "next-auth/providers/discord";
 import GitHub from "next-auth/providers/github";
 
@@ -21,10 +21,16 @@ declare module "next-auth" {
   // }
 }
 
-const providers: Provider[] = [GitHub, Discord];
+export interface ProviderMap {
+  id: string;
+  name: string;
+  icon?: string;
+}
 
-export const providerMap = providers
-  .map((provider: Provider & { icon?: string }) => {
+const providers: NextAuthProvider[] = [GitHub, Discord];
+
+export const providerMap: ProviderMap[] = providers
+  .map((provider: NextAuthProvider & { icon?: string }) => {
     if (typeof provider === "function") {
       const providerData = provider();
       return {
