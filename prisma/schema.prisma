@@ -44,13 +44,15 @@ model Session {
 }
  
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map("email_verified")
+  email         String?       @unique
+  emailVerified DateTime?     @map("email_verified")
   image         String?
   accounts      Account[]
   sessions      Session[]
+  images        Image[]
+  tryOnResults  TryOnResult[]
  
   @@map("users")
 }
@@ -62,4 +64,52 @@ model VerificationToken {
  
   @@unique([identifier, token])
   @@map("verification_tokens")
+}
+
+model Image {
+  id          String        @id @default(cuid())
+  url         String
+  key         String        @unique
+  bucket      String
+  type        String        // "selfie" または "garment"
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  userId      String?
+  user        User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  tryOnSource TryOnResult[] @relation("SourceImage")
+  itemId      String?
+  item        Item?         @relation("ItemImage", fields: [itemId], references: [id])
+  
+  @@map("images")
+}
+
+model Item {
+  id          String        @id @default(cuid())
+  name        String
+  type        String
+  imageUrl    String
+  description String?
+  price       Decimal?      @db.Decimal(10, 2)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  tryOnItems  TryOnResult[] @relation("TryOnItem")
+  images      Image[]       @relation("ItemImage")
+  
+  @@map("items")
+}
+
+model TryOnResult {
+  id              String   @id @default(cuid())
+  shareId         String   @unique
+  resultImageUrl  String
+  resultImageKey  String
+  sourceImageId   String
+  sourceImage     Image    @relation("SourceImage", fields: [sourceImageId], references: [id], onDelete: Cascade)
+  itemId          String
+  item            Item     @relation("TryOnItem", fields: [itemId], references: [id])
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt       DateTime @default(now())
+  
+  @@map("try_on_results")
 }
