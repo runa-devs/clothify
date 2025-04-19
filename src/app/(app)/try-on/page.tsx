@@ -9,7 +9,7 @@ import { ProcessingCard } from "../_components/processing-card";
 import { ProgressBar } from "../_components/progress-bar";
 import { ResultCard } from "../_components/result-card";
 import { UploadCard } from "../_components/upload-card";
-import { ResultPanel } from "./components/result-panel";
+import { ResultPanel } from "./_components/result-panel";
 import { useTryOn } from "./hooks/useTryOn";
 
 export default function TryOnPage() {
