@@ -15,6 +15,7 @@ export const env = createEnv({
     S3_SECRET_KEY: z.string().min(1),
     S3_BUCKET: z.string().min(1),
     S3_ENDPOINT: z.string().min(1),
+    COMFYUI_API_HOST: z.string().optional(),
   },
   /**
    * Specify runtimeEnv manually for Next.js < 13.4.4
@@ -29,6 +30,7 @@ export const env = createEnv({
     S3_SECRET_KEY: process.env.S3_SECRET_KEY,
     S3_BUCKET: process.env.S3_BUCKET,
     S3_ENDPOINT: process.env.S3_ENDPOINT,
+    COMFYUI_API_HOST: process.env.COMFYUI_API_HOST,
   },
   /**
    * Skip validation of environment variables (useful for CI/CD)
