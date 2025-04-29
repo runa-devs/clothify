@@ -13,7 +13,7 @@ import modal
 # Build Modal Image
 image = (
     modal.Image.debian_slim(python_version="3.11")
-    .apt_install("git")
+    .apt_install("git", "libgl1-mesa-dev", "libglib2.0-0")
     .pip_install("fastapi[standard]==0.115.4")
     .pip_install("comfy-cli==1.3.8")
     .run_commands("comfy --skip-prompt install --fast-deps --nvidia --version 0.3.10")
@@ -41,13 +41,13 @@ def create_s3_env():
 
     Path("/root/comfy/ComfyUI/custom_nodes/comfys3/.env").write_text(
         f"""
-S3_REGION = {os.environ["S3_REGION"]}
-S3_ENDPOINT = {os.environ["S3_ENDPOINT"]}
-S3_ACCESS_KEY = {os.environ["S3_ACCESS_KEY"]}
-S3_SECRET_KEY = {os.environ["S3_SECRET_KEY"]}
-S3_BUCKET_NAME = {os.environ["S3_BUCKET_NAME"]}
-S3_INPUT_DIR = {os.environ["S3_INPUT_DIR"]}
-S3_OUTPUT_DIR = {os.environ["S3_OUTPUT_DIR"]}
+S3_REGION = {os.environ.get("S3_REGION", "")}
+S3_ENDPOINT_URL = {os.environ.get("S3_ENDPOINT_URL", "")}
+S3_ACCESS_KEY = {os.environ.get("S3_ACCESS_KEY", "")}
+S3_SECRET_KEY = {os.environ.get("S3_SECRET_KEY", "")}
+S3_BUCKET_NAME = {os.environ.get("S3_BUCKET_NAME", "")}
+S3_INPUT_DIR = {os.environ.get("S3_INPUT_DIR", "")}
+S3_OUTPUT_DIR = {os.environ.get("S3_OUTPUT_DIR", "")}
 """
     )
 
@@ -55,15 +55,16 @@ S3_OUTPUT_DIR = {os.environ["S3_OUTPUT_DIR"]}
 image = image.run_function(
     create_s3_env,
     secrets=[modal.Secret.from_name("s3-secrets")],
+    force_build=True,
 )
 
 # Add memory snapshot helper custom node
 # See https://modal.com/docs/guide/faster-cold-starts#memory-snapshotting for details
-# image = image.add_local_dir(
-#     local_path=Path(__file__).parent / "memory_snapshot_helper",
-#     remote_path="/root/comfy/ComfyUI/custom_nodes/memory_snapshot_helper",
-#     copy=True,
-# )
+image = image.add_local_dir(
+    local_path=Path(__file__).parent / "memory_snapshot_helper",
+    remote_path="/root/comfy/ComfyUI/custom_nodes/memory_snapshot_helper",
+    copy=True,
+)
 
 
 # Function to download models using hf_hub_download for faster downloads
@@ -84,7 +85,7 @@ def hf_download(
     )
 
     # Symlink the model to the correct ComfyUI directory
-    model_dir = "/root/comfy/ComfyUI/models/"
+    model_dir
     Path(model_dir).mkdir(parents=True, exist_ok=True)
     subprocess.run(
         f"ln -s {model} {model_dir}/{filename}",
@@ -116,6 +117,11 @@ def hf_download_all():
             "model_dir": "/root/comfy/ComfyUI/models/style_models",
         },
         {
+            "repo_id": "comfyanonymous/flux_text_encoders",
+            "filename": "clip_l.safetensors",
+            "model_dir": "/root/comfy/ComfyUI/models/text_encoders",
+        },
+        {
             "repo_id": "Comfy-Org/sigclip_vision_384",
             "filename": "sigclip_vision_patch14_384.safetensors",
             "model_dir": "/root/comfy/ComfyUI/models/clip_vision",
@@ -128,7 +134,7 @@ def hf_download_all():
     ]
 
     for model in models:
-        hf_download(model["repo_id"], model["filename"])
+        hf_download(model["repo_id"], model["filename"], model["model_dir"])
 
 
 # Define a Modal Volume for caching Hugging Face models
@@ -157,21 +163,22 @@ else:
 
 app = modal.App(name="clothify-comfyui", image=image)
 
+
 # Interactive ComfyUI server (optional, for development/debugging)
-# @app.function(
-#     max_containers=1,
-#     gpu="L40S", # Or choose a suitable GPU
-#     volumes={"/cache": vol},
-# )
-# @modal.concurrent(max_inputs=10)
-# @modal.web_server(8000, startup_timeout=60)
-# def ui():
-#     subprocess.Popen("comfy launch -- --listen 0.0.0.0 --port 8000", shell=True)
+@app.function(
+    max_containers=1,
+    gpu="L40S",  # Or choose a suitable GPU
+    volumes={"/cache": vol},
+)
+@modal.concurrent(max_inputs=10)
+@modal.web_server(8000, startup_timeout=60)
+def ui():
+    subprocess.Popen("comfy launch -- --listen 0.0.0.0 --port 8000", shell=True)
 
 
 # Class to run ComfyUI as an API endpoint
 @app.cls(
-    scaledown_window=300,
+    scaledown_window=30,
     gpu="L40S",  # Or choose a suitable GPU
     volumes={"/cache": vol},
     enable_memory_snapshot=True,
@@ -184,7 +191,7 @@ class ComfyUI:
     def launch_comfy_background(self):
         # Using --preview-mode to prevent outputs saving to disk unless SaveImage node is used
         # Using --port {self.port} which is the default ComfyUI API port
-        cmd = "comfy launch --background"
+        cmd = f"comfy launch --background -- --port {self.port}"
         subprocess.run(cmd, shell=True, check=True)
         print(f"ComfyUI server started in background on port {self.port}")
         self.poll_server_health(startup=True)  # Initial health check
