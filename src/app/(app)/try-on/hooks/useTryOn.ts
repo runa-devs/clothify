@@ -64,8 +64,9 @@ export const useTryOn = () => {
     }
   };
 
-  const handleFileSelect = () => {
+  const handleFileSubmit = (file: File) => {
     setIsFileUploading(true);
+    console.log("ファイルを送信しました:", file);
     setTimeout(() => {
       setIsFileUploading(false);
       setStep(2);
@@ -90,7 +91,7 @@ export const useTryOn = () => {
     handleItemSelect,
     clearSelection,
     goToProduct,
-    handleFileSelect,
+    handleFileSubmit,
     handleTryAnother,
   };
 };

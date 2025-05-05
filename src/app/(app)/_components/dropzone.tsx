@@ -7,13 +7,13 @@ import { useCallback, useState } from "react";
 import { Accept, useDropzone } from "react-dropzone";
 
 interface ImageDropzoneProps {
-  onFileSelect: (file: File) => void;
+  onSubmit: (file: File) => void;
   accept?: Accept;
   maxSize?: number;
 }
 
 export const ImageDropzone = ({
-  onFileSelect,
+  onSubmit,
   accept = { "image/*": [] },
   maxSize = 5 * 1024 * 1024, // 5MB
 }: ImageDropzoneProps) => {
@@ -56,7 +56,12 @@ export const ImageDropzone = ({
           </div>
           <p className="mb-1 text-sm text-muted-foreground">{selectedFile?.name}</p>
           <Button
-            onClick={() => selectedFile && onFileSelect(selectedFile)}
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.stopPropagation();
+              if (selectedFile) {
+                onSubmit(selectedFile);
+              }
+            }}
             className="mt-3"
             type="button"
           >

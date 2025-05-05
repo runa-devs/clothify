@@ -4,11 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ImageDropzone } from "./dropzone";
 
 interface UploadCardProps {
-  onFileSelect: (file: File) => void;
+  onSubmit: (file: File) => void;
   disabled?: boolean;
 }
 
-export const UploadCard = ({ onFileSelect: onUpload }: UploadCardProps) => {
+export const UploadCard = ({ onSubmit }: UploadCardProps) => {
   return (
     <Card className="overflow-hidden border shadow-sm">
       <CardHeader className="bg-gradient-to-r from-secondary/50 to-secondary pb-4">
@@ -18,7 +18,7 @@ export const UploadCard = ({ onFileSelect: onUpload }: UploadCardProps) => {
         </CardDescription>
       </CardHeader>
       <CardContent className="p-6">
-        <ImageDropzone onFileSelect={onUpload} />
+        <ImageDropzone onSubmit={onSubmit} />
       </CardContent>
     </Card>
   );

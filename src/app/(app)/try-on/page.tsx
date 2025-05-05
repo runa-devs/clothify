@@ -27,7 +27,7 @@ export default function TryOnPage() {
     handleItemSelect,
     clearSelection,
     goToProduct,
-    handleFileSelect,
+    handleFileSubmit,
     handleTryAnother,
   } = useTryOn();
 
@@ -43,9 +43,7 @@ export default function TryOnPage() {
           )}
         >
           <div className="mx-auto max-w-md md:mx-0">
-            {step === 1 && (
-              <UploadCard onFileSelect={handleFileSelect} disabled={isFileUploading} />
-            )}
+            {step === 1 && <UploadCard onSubmit={handleFileSubmit} disabled={isFileUploading} />}
 
             {step === 2 && isMobile && (
               <ItemSelectionCard
