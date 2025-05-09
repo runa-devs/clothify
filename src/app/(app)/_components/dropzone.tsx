@@ -10,12 +10,14 @@ interface ImageDropzoneProps {
   onSubmit: (file: File) => void;
   accept?: Accept;
   maxSize?: number;
+  disabled?: boolean;
 }
 
 export const ImageDropzone = ({
   onSubmit,
   accept = { "image/*": [] },
   maxSize = 5 * 1024 * 1024, // 5MB
+  disabled = false,
 }: ImageDropzoneProps) => {
   const [preview, setPreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -35,6 +37,7 @@ export const ImageDropzone = ({
     maxFiles: 1,
     maxSize,
     onDropAccepted,
+    disabled,
   });
 
   return (
@@ -45,6 +48,7 @@ export const ImageDropzone = ({
         transition-all duration-200 ease-in-out
         ${isDragActive ? "border-primary bg-primary/5" : "border-muted hover:border-primary/50"}
         ${preview ? "border-primary/40 bg-primary/5" : ""}
+        ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}
       `}
     >
       <input {...getInputProps()} />
@@ -64,6 +68,7 @@ export const ImageDropzone = ({
             }}
             className="mt-3"
             type="button"
+            disabled={disabled}
           >
             <UploadIcon className="mr-2 size-4" />
             写真をアップロード

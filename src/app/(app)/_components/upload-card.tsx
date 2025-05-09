@@ -8,7 +8,7 @@ interface UploadCardProps {
   disabled?: boolean;
 }
 
-export const UploadCard = ({ onSubmit }: UploadCardProps) => {
+export const UploadCard = ({ onSubmit, disabled }: UploadCardProps) => {
   return (
     <Card className="overflow-hidden border shadow-sm">
       <CardHeader className="bg-gradient-to-r from-secondary/50 to-secondary pb-4">
@@ -18,7 +18,7 @@ export const UploadCard = ({ onSubmit }: UploadCardProps) => {
         </CardDescription>
       </CardHeader>
       <CardContent className="p-6">
-        <ImageDropzone onSubmit={onSubmit} />
+        <ImageDropzone onSubmit={onSubmit} disabled={disabled} />
       </CardContent>
     </Card>
   );

@@ -1,7 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AboutCard } from "../_components/about-card";
+import { ImageInputCard } from "../_components/image-input-card";
 import { ItemPreviewCard } from "../_components/item-preview-card";
 import { ItemSelectionCard } from "../_components/item-selection-card";
 import { ItemsPanel } from "../_components/items-panel";
@@ -18,7 +19,8 @@ export default function TryOnPage() {
     isGenerating,
     progress,
     isMobile,
-    isFileUploading,
+    isModelImageUploaded,
+    isClothingImageUploaded,
     isDrawerOpen,
     setIsDrawerOpen,
     selectedItem,
@@ -28,8 +30,16 @@ export default function TryOnPage() {
     clearSelection,
     goToProduct,
     handleFileSubmit,
+    handleNextStep,
     handleTryAnother,
+    handleUrlChange,
+    handleUrlSubmit,
+    isUrlValid,
+    urlError,
   } = useTryOn();
+
+  // 次のステップに進めるかどうかを確認
+  const canProceedToNextStep = isModelImageUploaded;
 
   return (
     <main className="flex flex-1 flex-col">
@@ -43,7 +53,48 @@ export default function TryOnPage() {
           )}
         >
           <div className="mx-auto max-w-md md:mx-0">
-            {step === 1 && <UploadCard onSubmit={handleFileSubmit} disabled={isFileUploading} />}
+            {step === 1 && !isMobile && (
+              <>
+                <UploadCard
+                  onSubmit={(file) => handleFileSubmit(file, true)}
+                  disabled={isModelImageUploaded}
+                />
+                <Button
+                  className={cn("mt-6 w-full")}
+                  disabled={!canProceedToNextStep}
+                  onClick={handleNextStep}
+                >
+                  次に進む
+                </Button>
+              </>
+            )}
+
+            {step === 1 && isMobile && (
+              <>
+                <UploadCard
+                  onSubmit={(file) => handleFileSubmit(file, true)}
+                  disabled={isModelImageUploaded}
+                />
+                <div className="mt-6">
+                  <ImageInputCard
+                    onSubmit={(file) => handleFileSubmit(file, false)}
+                    isClothingImageUploaded={isClothingImageUploaded}
+                    disabled={isClothingImageUploaded}
+                    onInputChange={handleUrlChange}
+                    handleUrlSubmit={handleUrlSubmit}
+                    isUrlValid={isUrlValid}
+                    urlError={urlError}
+                  />
+                </div>
+                <Button
+                  className="mt-6 w-full"
+                  disabled={!canProceedToNextStep}
+                  onClick={handleNextStep}
+                >
+                  次に進む
+                </Button>
+              </>
+            )}
 
             {step === 2 && isMobile && (
               <ItemSelectionCard
@@ -77,7 +128,19 @@ export default function TryOnPage() {
             )}
           </div>
 
-          {step === 1 && !isMobile && <AboutCard isMobile={isMobile} />}
+          {step === 1 && !isMobile && (
+            <div className="mx-auto mt-3 max-w-md md:mx-0">
+              <ImageInputCard
+                onSubmit={(file) => handleFileSubmit(file, false)}
+                isClothingImageUploaded={isClothingImageUploaded}
+                disabled={isClothingImageUploaded}
+                onInputChange={handleUrlChange}
+                handleUrlSubmit={handleUrlSubmit}
+                isUrlValid={isUrlValid}
+                urlError={urlError}
+              />
+            </div>
+          )}
 
           {step === 2 && !isMobile && (
             <ItemsPanel
