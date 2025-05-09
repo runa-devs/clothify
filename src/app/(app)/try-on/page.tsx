@@ -3,14 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ImageInputCard } from "../_components/image-input-card";
-import { ItemPreviewCard } from "../_components/item-preview-card";
-import { ItemSelectionCard } from "../_components/item-selection-card";
-import { ItemsPanel } from "../_components/items-panel";
 import { ProcessingCard } from "../_components/processing-card";
 import { ProgressBar } from "../_components/progress-bar";
 import { ResultCard } from "../_components/result-card";
 import { UploadCard } from "../_components/upload-card";
-import { ResultPanel } from "./_components/result-panel";
 import { useTryOn } from "./hooks/useTryOn";
 
 export default function TryOnPage() {
@@ -21,13 +17,7 @@ export default function TryOnPage() {
     isMobile,
     isModelImageUploaded,
     isClothingImageUploaded,
-    isDrawerOpen,
-    setIsDrawerOpen,
-    selectedItem,
     selectedItemData,
-    processImage,
-    handleItemSelect,
-    clearSelection,
     goToProduct,
     handleFileSubmit,
     handleNextStep,
@@ -36,9 +26,13 @@ export default function TryOnPage() {
     handleUrlSubmit,
     isUrlValid,
     urlError,
+    isShared,
+    toggleShare,
+    shareResult,
   } = useTryOn();
 
   const canProceedToNextStep = isModelImageUploaded;
+  const shareUrl = shareResult();
 
   return (
     <main className="flex flex-1 flex-col">
@@ -94,26 +88,11 @@ export default function TryOnPage() {
                 </Button>
               </>
             )}
-
-            {step === 2 && isMobile && (
-              <ItemSelectionCard
-                selectedItem={selectedItem}
-                onItemSelect={handleItemSelect}
-                onProcess={processImage}
-                isDrawerOpen={isDrawerOpen}
-                setIsDrawerOpen={setIsDrawerOpen}
-              />
+            {isGenerating && (
+              <div className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
+                <ProcessingCard progress={progress} />
+              </div>
             )}
-
-            {step === 2 && !isMobile && (
-              <ItemPreviewCard
-                selectedItemIndex={selectedItem}
-                onClearSelection={clearSelection}
-                onProcess={processImage}
-              />
-            )}
-
-            {isGenerating && <ProcessingCard progress={progress} />}
 
             {step === 3 && !isGenerating && (
               <ResultCard
@@ -123,6 +102,9 @@ export default function TryOnPage() {
                 afterImage={selectedItemData?.processedImage}
                 itemName={selectedItemData?.name}
                 itemType={selectedItemData?.type}
+                isShared={isShared}
+                onToggleShare={toggleShare}
+                shareUrl={shareUrl}
               />
             )}
           </div>
@@ -140,17 +122,6 @@ export default function TryOnPage() {
               />
             </div>
           )}
-
-          {step === 2 && !isMobile && (
-            <ItemsPanel
-              selectedItem={selectedItem}
-              onItemSelect={handleItemSelect}
-              onProcess={processImage}
-              isMobile={isMobile}
-            />
-          )}
-
-          {step === 3 && !isMobile && !isGenerating && <ResultPanel isMobile={isMobile} />}
         </div>
       </div>
     </main>
