@@ -38,7 +38,6 @@ export default function TryOnPage() {
     urlError,
   } = useTryOn();
 
-  // 次のステップに進めるかどうかを確認
   const canProceedToNextStep = isModelImageUploaded;
 
   return (
