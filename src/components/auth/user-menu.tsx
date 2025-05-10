@@ -28,7 +28,7 @@ export const UserMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem>
-          <Link href="#" className="flex items-center gap-2">
+          <Link href="/profile" className="flex items-center gap-2">
             <Avatar className="select-none">
               <AvatarImage draggable={false} src={user?.image ?? ""} />
               <AvatarFallback>{user?.name?.charAt(0) ?? "U"}</AvatarFallback>

@@ -76,6 +76,7 @@ model Item {
   updatedAt   DateTime      @updatedAt
   
   @@map("items")
+  TryOnResult TryOnResult[]
 }
 
 model TryOnResult {
@@ -86,6 +87,7 @@ model TryOnResult {
   itemId          String?  // if try-on created from catalog, itemId is set
   userId          String?  // generated on server side with nanoid
   user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  item            Item?    @relation(fields: [itemId], references: [id], onDelete: SetNull)
   isPublic        Boolean  @default(false)
   createdAt       DateTime @default(now())
   
