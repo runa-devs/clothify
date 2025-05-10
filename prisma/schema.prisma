@@ -14,35 +14,35 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String  @map("user_id")
-  type               String
-  provider           String
-  providerAccountId  String  @map("provider_account_id")
-  refresh_token      String? @db.Text
-  access_token       String? @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String? @db.Text
-  session_state      String?
- 
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
- 
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique @map("session_token")
   userId       String   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@map("sessions")
 }
- 
+
 model User {
   id            String        @id @default(cuid())
   name          String?
@@ -53,56 +53,68 @@ model User {
   sessions      Session[]
   tryOnResults  TryOnResult[]
   tryOnJobs     TryOnJob[]
- 
+
   @@map("users")
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@unique([identifier, token])
   @@map("verification_tokens")
 }
 
 model Item {
-  id          String        @id @default(cuid())
-  name        String
-  imageUrl    String
-  description String?
-  price       Int
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  
+  id            String        @id @default(cuid())
+  goodsId       Int // Unique identifier for the goods
+  name          String // Name of the item
+  url           String // URL to the item page
+  image         String // Full size image URL
+  image215      String // Thumbnail image URL (215px)
+  price         String // Regular price
+  salePrice     String? // Discounted price if on sale
+  brand         String? // Brand name in English
+  brandJp       String? // Brand name in Japanese
+  isSoldOut     Boolean       @default(false)
+  colorId       Int? // Color variation ID
+  colorName     String? // Color name
+  goodsDetailId Int // Detailed goods identifier
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  TryOnResult   TryOnResult[]
+  TryOnJob      TryOnJob[]
+
   @@map("items")
-  TryOnResult TryOnResult[]
 }
 
 model TryOnResult {
-  id              String   @id @default(cuid())
-  shareId         String   @unique
-  sourceKey       String   // key of the selfie image in S3
-  resultKey       String   // key of the result image in S3
-  itemId          String?  // if try-on created from catalog, itemId is set
-  userId          String?  // generated on server side with nanoid
-  user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  item            Item?    @relation(fields: [itemId], references: [id], onDelete: SetNull)
-  isPublic        Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  
+  id        String   @id @default(cuid())
+  shareId   String   @unique
+  sourceKey String // key of the selfie image in S3
+  resultKey String // key of the result image in S3
+  itemId    String? // if try-on created from catalog, itemId is set
+  userId    String? // generated on server side with nanoid
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  item      Item?    @relation(fields: [itemId], references: [id], onDelete: SetNull)
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
   @@map("try_on_results")
 }
 
 model TryOnJob {
-  id              String    @id @default(cuid())
-  category        String    // category of the costume
-  status          String    // PENDING, PROCESSING, COMPLETED, FAILED
-  error           String?   // error message if status is FAILED
-  userId          String    
-  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  
+  id        String   @id @default(cuid())
+  category  String // category of the costume
+  status    String // PENDING, PROCESSING, COMPLETED, FAILED
+  error     String? // error message if status is FAILED
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  itemId    String?
+  item      Item?    @relation(fields: [itemId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@map("try_on_jobs")
 }

@@ -35,7 +35,7 @@ const apiResponseSchema = z.object({
   props: pagePropsSchema,
 });
 
-const productSchema = z.object({
+export const productSchema = z.object({
   goodsId: z.number(),
   name: z.string(),
   price: z.string(),

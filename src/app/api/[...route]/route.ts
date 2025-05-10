@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { sendTryOnRequest, type ComfyUIRequest } from "@/lib/comfyui";
 import { prisma } from "@/lib/prisma";
 import { uploadFile } from "@/lib/s3";
+import { productSchema } from "@/lib/scraper";
 import { zValidator } from "@hono/zod-validator";
 import { Buffer } from "buffer";
 import { Hono } from "hono";
@@ -11,12 +12,14 @@ import { nanoid } from "nanoid";
 import { File } from "node:buffer";
 import { z } from "zod";
 import { catalogRoute } from "./catalog";
+
 const app = new Hono().basePath("/api");
 
 const tryOnSchema = z.object({
   selfie: z.instanceof(File, { message: "自撮り写真が必要です" }),
   costume: z.instanceof(File, { message: "衣服の画像が必要です" }),
   category: z.string().min(1, { message: "カテゴリーを指定してください" }),
+  item: productSchema.optional(),
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -42,20 +45,48 @@ const route = app
       }
 
       try {
-        const { selfie, costume, category } = c.req.valid("form");
+        const { selfie, costume, category, item } = c.req.valid("form");
 
         const id = nanoid();
         const selfieBuffer = Buffer.from(await selfie.arrayBuffer()).toString("base64");
         const costumeBuffer = Buffer.from(await costume.arrayBuffer()).toString("base64");
 
-        await prisma.tryOnJob.create({
-          data: {
-            id,
-            category,
-            status: "PENDING",
-            userId: session.user.id,
-          },
-        });
+        if (item) {
+          const result = await prisma.item.create({
+            data: {
+              goodsId: item.goodsId,
+              name: item.name ?? "Unknown",
+              price: item.price,
+              image: item.image,
+              image215: item.image215,
+              url: item.url,
+              brand: item.brand,
+              brandJp: item.brandJp,
+              isSoldOut: item.isSoldOut,
+              colorId: item.colorId,
+              colorName: item.colorName,
+              goodsDetailId: item.goodsDetailId,
+            },
+          });
+          await prisma.tryOnJob.create({
+            data: {
+              id,
+              category,
+              status: "PENDING",
+              userId: session.user.id,
+              itemId: result.id,
+            },
+          });
+        } else {
+          await prisma.tryOnJob.create({
+            data: {
+              id,
+              category,
+              status: "PENDING",
+              userId: session.user.id,
+            },
+          });
+        }
 
         void processTryOnJob(id, selfieBuffer, costumeBuffer);
 
@@ -192,10 +223,11 @@ async function processTryOnJob(
       contentType: "image/png",
     });
 
-    await prisma.tryOnResult.create({
+    const result = await prisma.tryOnResult.create({
       data: {
         id: jobId,
         resultKey,
+        itemId: job.itemId,
         sourceKey: originalSelfieKey,
         userId: job.userId,
         shareId: jobId,
@@ -206,6 +238,8 @@ async function processTryOnJob(
       where: { id: jobId },
       data: { status: "COMPLETED" },
     });
+    console.log(`Try-on job ${jobId} completed`);
+    console.log(result);
   } catch (error) {
     console.error(`Processing error for job ${jobId}:`, error);
 

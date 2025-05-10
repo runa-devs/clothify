@@ -59,8 +59,8 @@ export default async function ProfilePage() {
         const itemDetails: FittingItem = item
           ? {
               name: item.name,
-              brand: item.description?.substring(0, 20) || "Brandless",
-              category: item.description?.substring(0, 20) || "General",
+              brand: item.brandJp || "Brandless",
+              category: "General",
             }
           : { name: "Unknown Item", brand: "N/A", category: "Unknown" };
 

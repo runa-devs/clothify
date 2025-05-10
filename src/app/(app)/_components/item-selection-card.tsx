@@ -1,6 +1,5 @@
 "use client";
 
-import { clothingItems } from "@/components/clothing-items";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -13,13 +12,14 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Product } from "@/lib/scraper";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import { ItemGrid } from "./item-grid";
 
 interface ItemSelectionCardProps {
-  selectedItem?: string;
-  onItemSelect: (item: (typeof clothingItems)[0]) => void;
+  selectedItem?: Product;
+  onItemSelect: ({ item, file }: { item: Product; file: File }) => void;
   onProcess: () => void;
   isDrawerOpen: boolean;
   setIsDrawerOpen: (open: boolean) => void;
@@ -45,10 +45,8 @@ export const ItemSelectionCard = ({
               <div className="flex items-center justify-center rounded-md bg-muted p-3">
                 {selectedItem ? (
                   <Image
-                    src={
-                      clothingItems.find((item) => item.name === selectedItem)?.sourceImage ?? ""
-                    }
-                    alt={selectedItem ?? ""}
+                    src={selectedItem.image215 ?? ""}
+                    alt={selectedItem.name}
                     width={300}
                     height={400}
                     className="rounded-md"

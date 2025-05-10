@@ -1,6 +1,6 @@
 import { ClothesFormValues } from "@/app/(app)/try-on/_components/upload-clothes-card";
-import { clothingItems } from "@/components/clothing-items";
 import { client } from "@/lib/hono";
+import { Product } from "@/lib/scraper";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -8,6 +8,7 @@ type Payload = {
   clothesImage: File | undefined;
   selfieImage: File | undefined;
   category: string | undefined;
+  item: Product | undefined;
 };
 
 type JobStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | null;
@@ -33,11 +34,10 @@ export const useTryOn = () => {
   // URLから状態を復元
   const stepFromUrl = searchParams.get("step");
   const jobIdFromUrl = searchParams.get("jobId");
-  const itemFromUrl = searchParams.get("item");
 
   const [step, setStep] = useState(stepFromUrl ? parseInt(stepFromUrl, 10) : 1);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [item, setItem] = useState<string | undefined>(itemFromUrl || undefined);
+  const [item, setItem] = useState<Product | undefined>(undefined);
   const [progress, setProgress] = useState(0);
   const [jobId, setJobId] = useState<string | null>(jobIdFromUrl);
   const [jobStatus, setJobStatus] = useState<JobStatus>(null);
@@ -47,6 +47,7 @@ export const useTryOn = () => {
     clothesImage: undefined,
     selfieImage: undefined,
     category: undefined,
+    item: undefined,
   });
   const [error, setError] = useState<string | null>(null);
 
@@ -227,15 +228,15 @@ export const useTryOn = () => {
     }
   };
 
-  const handleItemSelect = (item: (typeof clothingItems)[0]) => {
+  const handleItemSelect = ({ item, file }: { item: Product; file: File }) => {
     clearError();
-    const file = new File([item.sourceImage], item.name, { type: "image/jpeg" });
     setPayload({
       ...payload,
       clothesImage: file,
-      category: item.category,
+      item: item,
+      category: "upper_clothes",
     });
-    setItem(item.name);
+    setItem(item);
     updateUrlState({ item: item.name });
   };
 
@@ -260,6 +261,20 @@ export const useTryOn = () => {
           selfie: payload.selfieImage,
           costume: payload.clothesImage,
           category: payload.category ?? "upper_clothes",
+          ...(payload.item && {
+            "item.goodsId": payload.item.goodsId.toString(),
+            "item.name": payload.item.name,
+            "item.price": payload.item.price,
+            "item.image": payload.item.image,
+            "item.image215": payload.item.image215,
+            "item.url": payload.item.url,
+            "item.brand": payload.item.brand,
+            "item.brandJp": payload.item.brandJp,
+            "item.isSoldOut": payload.item.isSoldOut.toString(),
+            "item.colorId": payload.item.colorId.toString(),
+            "item.colorName": payload.item.colorName,
+            "item.goodsDetailId": payload.item.goodsDetailId.toString(),
+          }),
         },
       });
 
