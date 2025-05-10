@@ -96,8 +96,6 @@ model TryOnResult {
 
 model TryOnJob {
   id              String    @id @default(cuid())
-  sourceKey       String    // key of the selfie image in S3
-  costumeKey      String    // key of the costume image in S3
   category        String    // category of the costume
   status          String    // PENDING, PROCESSING, COMPLETED, FAILED
   error           String?   // error message if status is FAILED

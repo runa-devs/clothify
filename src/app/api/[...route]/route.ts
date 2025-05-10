@@ -50,8 +50,6 @@ const route = app
         await prisma.tryOnJob.create({
           data: {
             id,
-            sourceKey: "",
-            costumeKey: "",
             category,
             status: "PENDING",
             userId: session.user.id,
