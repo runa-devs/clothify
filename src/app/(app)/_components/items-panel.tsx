@@ -1,5 +1,6 @@
 "use client";
 
+import { clothingItems } from "@/components/clothing-items";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,8 +15,8 @@ import { cn } from "@/lib/utils";
 import { ItemGrid } from "./item-grid";
 
 interface ItemsPanelProps {
-  selectedItem: number | null;
-  onItemSelect: (index: number) => void;
+  selectedItem: string;
+  onItemSelect: (item: (typeof clothingItems)[0]) => void;
   onProcess: () => void;
   isMobile: boolean;
   className?: string;
