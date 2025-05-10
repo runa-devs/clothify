@@ -12,8 +12,7 @@
     "inputs": {
       "clip_name1": "clip_l.safetensors",
       "clip_name2": "t5xxl_fp16.safetensors",
-      "type": "flux",
-      "device": "default"
+      "type": "flux"
     },
     "class_type": "DualCLIPLoader",
     "_meta": {
@@ -23,8 +22,8 @@
   "162": {
     "inputs": {
       "categories": "object,",
-      "confidence_threshold": 0.1,
-      "iou_threshold": 0.1,
+      "confidence_threshold": 0.10000000000000002,
+      "iou_threshold": 0.10000000000000002,
       "box_thickness": 2,
       "text_thickness": 2,
       "text_scale": 1,
@@ -43,7 +42,7 @@
         0
       ],
       "image": [
-        "267",
+        "272",
         0
       ]
     },
@@ -91,13 +90,13 @@
       "detail_method": "PyMatting",
       "detail_erode": 12,
       "detail_dilate": 6,
-      "black_point": 0.15,
+      "black_point": 0.15000000000000002,
       "white_point": 0.99,
       "process_detail": true,
       "device": "cuda",
       "max_megapixels": 2,
       "image": [
-        "266",
+        "273",
         0
       ]
     },
@@ -115,7 +114,7 @@
       "condition": "always",
       "multiple_of": 0,
       "image": [
-        "267",
+        "272",
         0
       ]
     },
@@ -133,7 +132,7 @@
       "condition": "always",
       "multiple_of": 0,
       "image": [
-        "266",
+        "273",
         0
       ]
     },
@@ -162,7 +161,7 @@
   },
   "189": {
     "inputs": {
-      "clip_name": "flux\\sigclip_vision_patch14_384.safetensors"
+      "clip_name": "sigclip_vision_patch14_384.safetensors"
     },
     "class_type": "CLIPVisionLoader",
     "_meta": {
@@ -197,7 +196,7 @@
   },
   "192": {
     "inputs": {
-      "strength": 1,
+      "strength": 1.0000000000000002,
       "strength_type": "multiply",
       "conditioning": [
         "195",
@@ -310,7 +309,7 @@
   "199": {
     "inputs": {
       "context_expand_pixels": 10,
-      "context_expand_factor": 1,
+      "context_expand_factor": 1.0000000000000002,
       "fill_mask_holes": true,
       "blur_mask_pixels": 0,
       "invert_mask": false,
@@ -319,7 +318,7 @@
       "mode": "ranged size",
       "force_width": 1024,
       "force_height": 1024,
-      "rescale_factor": 1,
+      "rescale_factor": 1.0000000000000002,
       "min_width": 512,
       "min_height": 512,
       "max_width": 1536,
@@ -340,7 +339,7 @@
     },
     "class_type": "InpaintCrop",
     "_meta": {
-      "title": "✂️ Inpaint Crop"
+      "title": "(OLD 💀, use the new ✂️ Inpaint Crop node)"
     }
   },
   "203": {
@@ -373,7 +372,7 @@
     },
     "class_type": "InpaintStitch",
     "_meta": {
-      "title": "✂️ Inpaint Stitch"
+      "title": "(OLD 💀, use the new ✂️ Inpaint Stitch node)"
     }
   },
   "206": {
@@ -394,18 +393,6 @@
     "class_type": "GrowMaskWithBlur",
     "_meta": {
       "title": "Grow Mask With Blur"
-    }
-  },
-  "207": {
-    "inputs": {
-      "mask": [
-        "162",
-        1
-      ]
-    },
-    "class_type": "MaskPreview+",
-    "_meta": {
-      "title": "XEM TRƯỚC MASK - Sản phẩm"
     }
   },
   "208": {
@@ -691,7 +678,7 @@
   },
   "236": {
     "inputs": {
-      "seed": 422336371208614
+      "seed": 668772506699299
     },
     "class_type": "easy seed",
     "_meta": {
@@ -700,9 +687,9 @@
   },
   "258": {
     "inputs": {
-      "filename_prefix": "clothify",
+      "filename_prefix": "result_",
       "images": [
-        "204",
+        "276",
         0
       ]
     },
@@ -711,54 +698,78 @@
       "title": "画像を保存"
     }
   },
-  "264": {
-    "inputs": {},
-    "class_type": "LoadImageS3",
-    "_meta": {
-      "title": "Load Image from S3"
-    }
-  },
-  "265": {
-    "inputs": {},
-    "class_type": "LoadImageS3",
-    "_meta": {
-      "title": "Load Image from S3"
-    }
-  },
-  "266": {
-    "inputs": {},
-    "class_type": "LoadImageS3",
-    "_meta": {
-      "title": "Load Human Image from S3"
-    }
-  },
-  "267": {
-    "inputs": {},
-    "class_type": "LoadImageS3",
-    "_meta": {
-      "title": "Load Costume Image from S3"
-    }
-  },
-  "268": {
+  "272": {
     "inputs": {
-      "filename_prefix": "Image"
+      "base64_data": "",
+      "image_output": "Save",
+      "save_prefix": "costume_"
     },
-    "class_type": "SaveImageS3",
+    "class_type": "easy loadImageBase64",
     "_meta": {
-      "title": "Save Image to S3"
+      "title": "Load Costume(Base64)"
     }
   },
-  "269": {
+  "273": {
     "inputs": {
-      "filename_prefix": "result",
-      "images": [
+      "base64_data": "",
+      "image_output": "Save",
+      "save_prefix": "human_"
+    },
+    "class_type": "easy loadImageBase64",
+    "_meta": {
+      "title": "Load Human Image (Base64)"
+    }
+  },
+  "276": {
+    "inputs": {
+      "width": [
+        "293",
+        0
+      ],
+      "height": [
+        "183",
+        2
+      ],
+      "position": "right-center",
+      "x_offset": 0,
+      "y_offset": 0,
+      "image": [
         "204",
         0
       ]
     },
-    "class_type": "SaveImageS3",
+    "class_type": "ImageCrop+",
     "_meta": {
-      "title": "Save Image to S3"
+      "title": "🔧 Image Crop"
+    }
+  },
+  "293": {
+    "inputs": {
+      "value": "b-a",
+      "a": [
+        "183",
+        1
+      ],
+      "b": [
+        "295",
+        0
+      ]
+    },
+    "class_type": "SimpleMath+",
+    "_meta": {
+      "title": "🔧 Simple Math"
+    }
+  },
+  "295": {
+    "inputs": {
+      "image": [
+        "187",
+        0
+      ]
+    },
+    "class_type": "GetImageSize+",
+    "_meta": {
+      "title": "🔧 Get Image Size"
     }
   }
 }
