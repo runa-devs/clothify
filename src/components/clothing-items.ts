@@ -7,6 +7,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/tops/1.jpg",
     processedImage: "/samples/processed/tops/1.png",
     type: "トップス",
+    category: "upper_clothes",
     url: "https://zozo.jp/shop/mono-mart/goods/85590426/?did=141552168",
   },
   {
@@ -16,6 +17,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/tops/2.jpg",
     processedImage: "/samples/processed/tops/2.png",
     type: "トップス",
+    category: "upper_clothes",
     url: "https://zozo.jp/shop/spade/goods-sale/69414979/?kid=300000003",
   },
   {
@@ -25,6 +27,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/tops/3.jpg",
     processedImage: "/samples/processed/tops/3.png",
     type: "トップス",
+    category: "upper_clothes",
     url: "https://store.nanouniverse.jp/products/6684117202",
   },
   {
@@ -34,6 +37,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/tops/4.jpg",
     processedImage: "/samples/processed/tops/4.png",
     type: "トップス",
+    category: "upper_clothes",
     url: "https://zozo.jp/shop/freaksstore/goods/85486404/",
   },
   {
@@ -43,6 +47,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/tops/5.jpg",
     processedImage: "/samples/processed/tops/5.png",
     type: "トップス",
+    category: "upper_clothes",
     url: "https://www.daytona-park.com/item/1051207500158",
   },
 
@@ -54,6 +59,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/pants/1.webp",
     processedImage: "/samples/processed/pants/1.png",
     type: "パンツ",
+    category: "pants",
     url: "https://www.uniqlo.com/jp/ja/products/E473319-000/00?colorDisplayCode=64&sizeDisplayCode=029",
   },
   {
@@ -63,6 +69,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/pants/2.jpg",
     processedImage: "/samples/processed/pants/2.png",
     type: "パンツ",
+    category: "pants",
     url: "https://www.gu-global.com/jp/ja/products/E352006-000/00?colorDisplayCode=38&sizeDisplayCode=004",
   },
   {
@@ -72,6 +79,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/pants/3.jpg",
     processedImage: "/samples/processed/pants/3.png",
     type: "パンツ",
+    category: "pants",
     url: "https://www.gu-global.com/jp/ja/products/E357061-001/00?colorDisplayCode=31&sizeDisplayCode=004",
   },
   {
@@ -81,6 +89,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/pants/4.jpg",
     processedImage: "/samples/processed/pants/4.png",
     type: "パンツ",
+    category: "pants",
     url: "https://www.gu-global.com/jp/ja/products/E356425-000/00?colorDisplayCode=62&sizeDisplayCode=004",
   },
   {
@@ -90,6 +99,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/pants/5.jpg",
     processedImage: "/samples/processed/pants/5.png",
     type: "パンツ",
+    category: "pants",
     url: "https://www.uniqlo.com/jp/ja/products/E463954-000/00?colorDisplayCode=58&sizeDisplayCode=004",
   },
 
@@ -101,6 +111,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/hat/1.jpg",
     processedImage: "/samples/processed/hat/1.png",
     type: "帽子",
+    category: "hat",
     url: "https://japan.borsalino.com/products/b45079d0053_877b",
   },
   {
@@ -110,6 +121,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/hat/2.jpg",
     processedImage: "/samples/processed/hat/2.png",
     type: "帽子",
+    category: "hat",
     url: "https://www.nike.com/jp/t/%E3%83%8A%E3%82%A4%E3%82%AD-%E3%83%AA%E3%83%88%E3%83%AB%E3%82%AD%E3%83%83%E3%82%BA-%E3%82%A2%E3%82%B8%E3%83%A3%E3%82%B9%E3%82%BF%E3%83%96%E3%83%AB-%E3%82%AD%E3%83%A3%E3%83%83%E3%83%97-JW2xZ8",
   },
   {
@@ -119,6 +131,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/hat/3.jpg",
     processedImage: "/samples/processed/hat/3.png",
     type: "帽子",
+    category: "hat",
     url: "https://www.amazon.co.jp/%E7%94%B0%E4%B8%AD%E5%B8%BD%E5%AD%90%E5%BA%97-%E9%AC%BC%E9%BA%A6%E3%82%AB%E3%83%B3%E3%82%AB%E3%83%B3%E5%B8%BD%EF%BC%88%E7%B4%B3%E5%A3%AB%E7%94%A8%EF%BC%89-%E9%BA%A6%E3%82%8F%E3%82%89%E5%B8%BD%E5%AD%90-%E3%82%B9%E3%83%88%E3%83%AD%E3%83%BC%E3%83%8F%E3%83%83%E3%83%88-UK-H048/dp/B01E6GCV0K",
   },
   {
@@ -128,6 +141,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/hat/4.jpg",
     processedImage: "/samples/processed/hat/4.png",
     type: "帽子",
+    category: "hat",
     url: "https://item.rakuten.co.jp/shoplistselect/ii000005969/",
   },
   {
@@ -137,6 +151,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/hat/5.jpg",
     processedImage: "/samples/processed/hat/5.png",
     type: "帽子",
+    category: "hat",
     url: "https://sugegasa.jp/item/%E3%81%8A%E3%81%97%E3%82%83%E3%82%8C%E5%B8%BD%E5%AD%90/",
   },
 
@@ -148,6 +163,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/glasses/1.jpg",
     processedImage: "/samples/processed/glasses/1.png",
     type: "メガネ",
+    category: "sunglass",
     url: "https://www.glass-mates.jp/products/detail/6428",
   },
   {
@@ -157,6 +173,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/glasses/2.jpg",
     processedImage: "/samples/processed/glasses/2.png",
     type: "メガネ",
+    category: "sunglass",
     url: "https://www.amazon.co.jp/-/en/GS-POLA917-Polarized-Sunglasses-Protection-Lightweight/dp/B0CL4GZW2H",
   },
   {
@@ -166,6 +183,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/glasses/3.jpg",
     processedImage: "/samples/processed/glasses/3.png",
     type: "メガネ",
+    category: "sunglass",
     url: "https://store.ferrari.com/ja-jp/eyewear/ferrari%E3%82%B3%E3%83%AC%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3/%E3%82%B5%E3%83%B3%E3%82%B0%E3%83%A9%E3%82%B9/ferrari-%E3%83%88%E3%83%A9%E3%83%B3%E3%82%B9%E3%83%9A%E3%82%A2%E3%83%AC%E3%83%B3%E3%83%88%E3%82%A4%E3%82%A8%E3%83%AD%E3%83%BC%E3%82%A2%E3%82%BB%E3%83%86%E3%83%BC%E3%83%88-%E3%82%B5%E3%83%B3%E3%82%B0%E3%83%A9%E3%82%B9-%E3%82%A4%E3%82%A8%E3%83%AD%E3%83%BC%E3%83%AC%E3%83%B3%E3%82%BA-F1278f14.html",
   },
   {
@@ -175,6 +193,7 @@ export const clothingItems = [
     unprocessedImage: "/samples/unprocessed/glasses/4.jpg",
     processedImage: "/samples/processed/glasses/4.png",
     type: "メガネ",
+    category: "sunglass",
     url: "https://shop.orionbeer.co.jp/products/310082",
   },
 ];

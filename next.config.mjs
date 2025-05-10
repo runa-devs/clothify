@@ -8,7 +8,10 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: "clothify-images.runa.dev",
+        hostname: "*.r2.cloudflarestorage.com",
+      },
+      {
+        hostname: "*",
       },
     ],
   },

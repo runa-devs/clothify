@@ -45,16 +45,9 @@ export async function sendTryOnRequest(request: ComfyUIRequest): Promise<Blob> {
 }
 
 export async function getBase64FromFile(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      const base64String = reader.result as string;
-      const base64Data = base64String.split(",")[1];
-      resolve(base64Data);
-    };
-    reader.onerror = (error) => reject(error);
-  });
+  const buffer = await file.arrayBuffer();
+  const base64Data = Buffer.from(buffer).toString("base64");
+  return base64Data;
 }
 
 /**

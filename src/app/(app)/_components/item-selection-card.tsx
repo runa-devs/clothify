@@ -18,8 +18,8 @@ import Image from "next/image";
 import { ItemGrid } from "./item-grid";
 
 interface ItemSelectionCardProps {
-  selectedItem: number | null;
-  onItemSelect: (index: number) => void;
+  selectedItem?: string;
+  onItemSelect: (item: (typeof clothingItems)[0]) => void;
   onProcess: () => void;
   isDrawerOpen: boolean;
   setIsDrawerOpen: (open: boolean) => void;
@@ -45,8 +45,10 @@ export const ItemSelectionCard = ({
               <div className="flex items-center justify-center rounded-md bg-muted p-3">
                 {selectedItem ? (
                   <Image
-                    src={clothingItems[selectedItem].sourceImage}
-                    alt={clothingItems[selectedItem].name}
+                    src={
+                      clothingItems.find((item) => item.name === selectedItem)?.sourceImage ?? ""
+                    }
+                    alt={selectedItem ?? ""}
                     width={300}
                     height={400}
                     className="rounded-md"

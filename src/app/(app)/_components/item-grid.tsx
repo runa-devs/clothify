@@ -8,8 +8,8 @@ import Image from "next/image";
 import { useState } from "react";
 
 interface ItemGridProps {
-  selectedItem: number | null;
-  onItemSelect: (id: number) => void;
+  selectedItem?: string;
+  onItemSelect: (item: (typeof clothingItems)[0]) => void;
   className?: string;
 }
 
@@ -17,6 +17,10 @@ export const ItemGrid = ({ selectedItem, onItemSelect, className }: ItemGridProp
   const [filter, setFilter] = useState<string | null>(null);
 
   const filteredItems = clothingItems.filter((item) => item.type === filter || !filter);
+
+  const onSelect = (id: number) => {
+    onItemSelect(clothingItems[id - 1]);
+  };
 
   return (
     <div className={cn("flex-1 space-y-4 p-2", className)}>
@@ -71,9 +75,9 @@ export const ItemGrid = ({ selectedItem, onItemSelect, className }: ItemGridProp
             key={item.id}
             className={cn(
               "cursor-pointer transition-all hover:border-primary/50",
-              selectedItem === item.id ? "border-primary bg-accent shadow-md" : "border-border"
+              selectedItem === item.name ? "border-primary bg-accent shadow-md" : "border-border"
             )}
-            onClick={() => onItemSelect(item.id)}
+            onClick={() => onSelect(item.id)}
           >
             <CardContent className="p-3">
               <div className="relative aspect-square w-full overflow-hidden rounded-md">

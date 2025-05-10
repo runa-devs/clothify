@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 
 type ProtectedProps = {
   children: React.ReactNode;
+  exclude?: string[];
 };
 
 export const Protected: React.FC<ProtectedProps> = async ({ children }) => {

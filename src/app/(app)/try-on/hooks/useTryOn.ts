@@ -1,4 +1,5 @@
 import { clothingItems } from "@/components/clothing-items";
+import { client } from "@/lib/hono";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -59,10 +60,13 @@ export const useTryOn = () => {
   const processImage = async () => {
     setIsGenerating(true);
     setIsDrawerOpen(false);
-    for (let i = 0; i <= 100; i += 10) {
-      setProgress(i);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    }
+    const result = await client.api["try-on"].$post({
+      form: {
+        selfie: modelImage,
+        costume: isClothingImageUploaded,
+        category: selectedItemData?.type ?? "uppper_clothes",
+      },
+    });
     setIsGenerating(false);
 
     const uuid = uuidv4();

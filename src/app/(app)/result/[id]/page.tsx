@@ -1,8 +1,8 @@
+import { ResultContainer } from "@/app/(app)/result/_components/resultcontainer";
 import { env } from "@/env";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateDownloadUrl } from "@/lib/s3";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 interface ResultPageProps {
   params: Promise<{ id: string }>;
@@ -17,9 +17,6 @@ export default async function ResultPage({ params }: ResultPageProps) {
     where: {
       id,
       OR: [{ isPublic: true }, { userId: session?.user.id }],
-    },
-    include: {
-      item: true,
     },
   });
 
@@ -42,9 +39,15 @@ export default async function ResultPage({ params }: ResultPageProps) {
   });
 
   return (
-    <div>
-      <Image src={resultUrl} alt="Result" width={500} height={500} />
-      <Image src={sourceUrl} alt="Source" width={500} height={500} />
+    <div className="container mx-auto flex size-full w-full flex-1 items-center justify-normal">
+      <div className="mt-32 flex w-full flex-col justify-center gap-4 p-3 md:mt-0 md:flex-row">
+        <ResultContainer
+          beforeImage={sourceUrl}
+          afterImage={resultUrl}
+          isPublic={result.isPublic}
+          resultId={id}
+        />
+      </div>
     </div>
   );
 }

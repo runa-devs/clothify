@@ -23,14 +23,13 @@ import { useEffect } from "react";
 import { BeforeAfterSlider } from "../../(marketing)/_components/before-after-slider";
 
 interface ResultCardProps {
-  onTryAnother: () => void;
   onGoToProduct?: () => void;
   beforeImage?: string;
   afterImage?: string;
   itemName?: string;
   itemType?: string;
-  isShared?: boolean;
-  onToggleShare?: () => void;
+  isPublic?: boolean;
+  onTogglePublic?: () => void;
   shareUrl?: string;
   isMarketplace?: boolean;
   itemUrl?: string;
@@ -42,8 +41,8 @@ export const ResultCard = ({
   afterImage = "/samples/processed/tops/1.png",
   itemName = "カジュアルTシャツ",
   itemType = "トップス",
-  isShared = false,
-  onToggleShare,
+  isPublic = false,
+  onTogglePublic,
   shareUrl = "",
   itemUrl = "",
 }: ResultCardProps) => {
@@ -82,7 +81,7 @@ export const ResultCard = ({
   };
 
   return (
-    <Card className="shadow-sm">
+    <Card className="w-full max-w-[700px] shadow-sm">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div>
@@ -116,16 +115,16 @@ export const ResultCard = ({
         <div className="mx-auto max-w-md">
           <BeforeAfterSlider beforeImage={beforeImage} afterImage={afterImage} />
           <div className="mt-3 space-y-2">
-            <div className="flex items-center justify-between rounded-lg border border-border bg-muted/30 p-3 text-sm">
+            <div className="flex items-center justify-between gap-3 rounded-lg border border-border bg-muted/30 p-3 text-sm">
               <div className="flex flex-col space-y-1">
                 <Label htmlFor="share-mode" className="font-medium">
-                  結果を共有する
+                  結果を公開する
                 </Label>
                 <p className="text-xs text-muted-foreground">
                   オンにすると結果ページを他の人と共有できます
                 </p>
               </div>
-              <Switch id="share-mode" checked={isShared} onCheckedChange={onToggleShare} />
+              <Switch id="share-mode" checked={isPublic} onCheckedChange={onTogglePublic} />
             </div>
           </div>
         </div>
@@ -135,13 +134,13 @@ export const ResultCard = ({
           ホームに戻る
         </Button>
         <Button
-          className="flex-1 bg-primary transition-colors hover:bg-primary/90"
+          variant="secondary"
           onClick={() => {
-            console.log(`${itemUrl}へ移動します`);
             onGoToProduct?.();
           }}
+          disabled={!itemUrl}
         >
-          商品ページへ
+          <span>商品ページへ</span>
         </Button>
       </CardFooter>
     </Card>
