@@ -156,7 +156,9 @@ export const useTryOn = () => {
   };
 
   const handleNextStep = () => {
-    if (isModelImageUploaded) {
+    if (isModelImageUploaded && !isClothingImageUploaded) {
+      setStep(2);
+    } else if (isModelImageUploaded && isClothingImageUploaded) {
       setStep(2);
       processImage();
     }
