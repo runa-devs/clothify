@@ -27,7 +27,9 @@ export const Header = () => {
       <div className="container mx-auto flex h-16 max-w-5xl items-center justify-between px-4 md:px-6 lg:px-8">
         <Link href="/" className="flex items-center justify-center gap-2">
           <Image src="/logo.svg" className="dark:invert" alt="Clothify" height={96} width={96} />
-          <span className="rounded-full bg-blue-500 px-2 py-0.5 text-sm font-bold">Beta</span>
+          <span className="rounded-full bg-blue-500 px-2 py-0.5 text-sm font-semibold text-white">
+            Beta
+          </span>
         </Link>
 
         <div className="flex items-center gap-4">
