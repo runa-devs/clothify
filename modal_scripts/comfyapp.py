@@ -226,7 +226,7 @@ class ComfyUI:
             print(f"Error decoding queue response: {e}", file=sys.stderr)
             raise Exception(f"Failed to decode queue response: {e}")
 
-        timeout_seconds = 300
+        timeout_seconds = 200
         start_time = time.time()
         while time.time() - start_time < timeout_seconds:
             print(
@@ -237,6 +237,14 @@ class ComfyUI:
                 history_response = requests.get(history_url, timeout=5)
                 history_response.raise_for_status()
                 history_data = history_response.json()
+
+                if (
+                    prompt_id in history_data
+                    and history_data[prompt_id]["status"]["status_str"] == "error"
+                ):
+                    raise Exception(
+                        f"Prompt {prompt_id} failed with error: \n{history_data[prompt_id]['status']['messages']}"
+                    )
 
                 if prompt_id in history_data and history_data[prompt_id]["outputs"]:
                     outputs = history_data[prompt_id]["outputs"]
