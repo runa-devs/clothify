@@ -10,7 +10,7 @@ import { handle } from "hono/vercel";
 import { nanoid } from "nanoid";
 import { File } from "node:buffer";
 import { z } from "zod";
-
+import { catalogRoute } from "./catalog";
 const app = new Hono().basePath("/api");
 
 const tryOnSchema = z.object({
@@ -21,6 +21,7 @@ const tryOnSchema = z.object({
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const route = app
+  .route("/search", catalogRoute)
   .post(
     "/try-on",
     zValidator("form", tryOnSchema, (result, c) => {
