@@ -51,7 +51,6 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  images        Image[]
   tryOnResults  TryOnResult[]
  
   @@map("users")
@@ -66,34 +65,14 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-model Image {
-  id          String        @id @default(cuid())
-  url         String
-  key         String        @unique
-  bucket      String
-  type        String        // "selfie" または "garment"
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  userId      String?
-  user        User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
-  tryOnSource TryOnResult[] @relation("SourceImage")
-  itemId      String?
-  item        Item?         @relation("ItemImage", fields: [itemId], references: [id])
-  
-  @@map("images")
-}
-
 model Item {
   id          String        @id @default(cuid())
   name        String
-  type        String
   imageUrl    String
   description String?
-  price       Decimal?      @db.Decimal(10, 2)
+  price       Int
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  tryOnItems  TryOnResult[] @relation("TryOnItem")
-  images      Image[]       @relation("ItemImage")
   
   @@map("items")
 }
@@ -101,14 +80,12 @@ model Item {
 model TryOnResult {
   id              String   @id @default(cuid())
   shareId         String   @unique
-  resultImageUrl  String
-  resultImageKey  String
-  sourceImageId   String
-  sourceImage     Image    @relation("SourceImage", fields: [sourceImageId], references: [id], onDelete: Cascade)
-  itemId          String
-  item            Item     @relation("TryOnItem", fields: [itemId], references: [id])
-  userId          String?
+  sourceKey       String   // key of the selfie image in S3
+  resultKey       String   // key of the result image in S3
+  itemId          String?  // if try-on created from catalog, itemId is set
+  userId          String?  // generated on server side with nanoid
   user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  isPublic        Boolean  @default(false)
   createdAt       DateTime @default(now())
   
   @@map("try_on_results")
