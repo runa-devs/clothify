@@ -1,4 +1,5 @@
 import { env } from "@/env/server";
+import { File } from "node:buffer";
 
 export interface ComfyUIRequest {
   costumeData: string;

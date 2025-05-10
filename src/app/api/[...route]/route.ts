@@ -8,6 +8,7 @@ import { Buffer } from "buffer";
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
 import { nanoid } from "nanoid";
+import { File } from "node:buffer";
 import { z } from "zod";
 
 const app = new Hono().basePath("/api");
