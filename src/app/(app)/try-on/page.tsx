@@ -1,5 +1,6 @@
 "use client";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMobile } from "@/hooks/use-mobile";
@@ -25,6 +26,7 @@ export default function TryOnPage() {
     processImage,
     jobId,
     jobStatus,
+    error,
   } = useTryOn();
   const { isMobile } = useMobile();
 
@@ -32,7 +34,14 @@ export default function TryOnPage() {
     <main className="flex flex-1 flex-col">
       {isGenerating && <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" />}
 
-      <div className="container mx-auto max-w-5xl space-y-6 px-4 pt-24">
+      <div className="container mx-auto max-w-5xl space-y-6 px-4 pt-12 sm:pt-24">
+        {error && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertTitle>エラーが発生しました</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
         <ProgressBar step={step} className="mb-10" />
 
         <div

@@ -48,6 +48,7 @@ export const useTryOn = () => {
     selfieImage: undefined,
     category: undefined,
   });
+  const [error, setError] = useState<string | null>(null);
 
   // 処理の予想時間（ミリ秒）- 約30秒
   const ESTIMATED_PROCESSING_TIME = 130000;
@@ -84,6 +85,10 @@ export const useTryOn = () => {
     }
   };
 
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
   const pollJobStatus = useCallback(
     async (id: string) => {
       try {
@@ -109,6 +114,7 @@ export const useTryOn = () => {
                 setPollingInterval(null);
                 setIsGenerating(false);
                 setStartTime(null);
+                clearError();
 
                 setJobId(null);
                 updateUrlState({ jobId: null });
@@ -121,37 +127,57 @@ export const useTryOn = () => {
                 setPollingInterval(null);
                 setIsGenerating(false);
                 setStartTime(null);
+                const errorMessage = statusData.error || "ジョブ処理に失敗しました。";
+                setError(errorMessage);
+                console.error("ジョブ処理に失敗しました:", errorMessage);
 
                 setJobId(null);
                 updateUrlState({ jobId: null });
-
-                console.error("ジョブ処理に失敗しました:", statusData.error);
               }
             } else {
+              const errorMessage =
+                statusData.error || `ステータス確認エラー: ${statusResponse.status}`;
+              // For server-side errors during polling, we might want to stop polling too.
+              clearInterval(interval);
+              setPollingInterval(null);
+              setIsGenerating(false);
+              setStartTime(null);
+              setError(errorMessage);
               console.error("ステータス確認エラー:", statusData);
             }
-          } catch (error) {
-            console.error("ポーリングエラー:", error);
+          } catch (e) {
+            const errorMessage =
+              e instanceof Error ? e.message : "ポーリング中に予期せぬエラーが発生しました。";
+            setError(errorMessage);
+            console.error("ポーリングエラー:", e);
+            clearInterval(interval); // Stop polling on error
+            setPollingInterval(null); // Clear interval ID
+            setIsGenerating(false); // Set generating to false
+            setStartTime(null); // Reset start time
           }
         }, POLLING_INTERVAL);
 
         setPollingInterval(interval);
-      } catch (error) {
-        console.error("ポーリング開始エラー:", error);
+      } catch (e) {
+        const errorMessage =
+          e instanceof Error ? e.message : "ポーリング開始時にエラーが発生しました。";
+        setError(errorMessage);
+        console.error("ポーリング開始エラー:", e);
         setIsGenerating(false);
         setStartTime(null);
       }
     },
-    [router]
+    [router, clearError]
   );
 
   useEffect(() => {
     if (jobIdFromUrl && !pollingInterval) {
+      clearError();
       setIsGenerating(true);
       setStartTime(Date.now());
       pollJobStatus(jobIdFromUrl);
     }
-  }, [jobIdFromUrl, pollJobStatus, pollingInterval]);
+  }, [jobIdFromUrl, pollJobStatus, pollingInterval, clearError]);
 
   useEffect(() => {
     return () => {
@@ -181,14 +207,17 @@ export const useTryOn = () => {
   }, [isGenerating, startTime]);
 
   const handleClothesChange = (values: ClothesFormValues) => {
+    clearError();
     setPayload({ ...payload, clothesImage: values.imageFile, category: values.category });
   };
 
   const handleSelfieChange = (file: File) => {
+    clearError();
     setPayload({ ...payload, selfieImage: file });
   };
 
   const completeStep1 = () => {
+    clearError();
     if (payload.clothesImage && payload.selfieImage) {
       processImage();
     } else {
@@ -199,6 +228,7 @@ export const useTryOn = () => {
   };
 
   const handleItemSelect = (item: (typeof clothingItems)[0]) => {
+    clearError();
     const file = new File([item.sourceImage], item.name, { type: "image/jpeg" });
     setPayload({
       ...payload,
@@ -210,13 +240,18 @@ export const useTryOn = () => {
   };
 
   const processImage = async () => {
+    clearError();
     setIsGenerating(true);
     setProgress(0);
     setStartTime(Date.now());
     console.log(payload);
 
     if (!payload.selfieImage || !payload.clothesImage) {
-      throw new Error("画像が選択されていません");
+      const msg = "画像が選択されていません";
+      setError(msg);
+      setIsGenerating(false);
+      setStartTime(null);
+      return;
     }
 
     try {
@@ -255,12 +290,15 @@ export const useTryOn = () => {
       setIsGenerating(false);
       setStartTime(null);
       const errorData = (await result.json()) as TryOnResponse;
-      throw new Error(errorData.error || "画像の処理に失敗しました");
-    } catch (error) {
+      const errorMessage = errorData.error || "画像の処理に失敗しました";
+      setError(errorMessage);
+    } catch (e) {
       setIsGenerating(false);
       setStartTime(null);
-      console.error("処理エラー:", error);
-      throw error;
+      const errorMessage =
+        e instanceof Error ? e.message : "画像の処理中に予期せぬエラーが発生しました。";
+      setError(errorMessage);
+      console.error("処理エラー:", e);
     }
   };
 
@@ -268,23 +306,29 @@ export const useTryOn = () => {
     updateUrlState({ step });
   }, [step]);
 
+  const updateStep = (newStep: number) => {
+    clearError();
+    setStep(newStep);
+    updateUrlState({ step: newStep });
+  };
+
   return {
     handleClothesChange,
     handleSelfieChange,
     payload,
     step,
-    setStep: (newStep: number) => {
-      setStep(newStep);
-      updateUrlState({ step: newStep });
-    },
+    setStep: updateStep,
     completeStep1,
     isGenerating,
     progress,
     item,
     handleItemSelect,
     processImage,
-    simulateProgress, // 進捗シミュレーション関数を公開
+    simulateProgress,
     jobId,
     jobStatus,
+    error,
+    setError,
+    clearError,
   };
 };
