@@ -52,6 +52,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   tryOnResults  TryOnResult[]
+  tryOnJobs     TryOnJob[]
  
   @@map("users")
 }
@@ -89,4 +90,19 @@ model TryOnResult {
   createdAt       DateTime @default(now())
   
   @@map("try_on_results")
+}
+
+model TryOnJob {
+  id              String    @id @default(cuid())
+  sourceKey       String    // key of the selfie image in S3
+  costumeKey      String    // key of the costume image in S3
+  category        String    // category of the costume
+  status          String    // PENDING, PROCESSING, COMPLETED, FAILED
+  error           String?   // error message if status is FAILED
+  userId          String    
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@map("try_on_jobs")
 }

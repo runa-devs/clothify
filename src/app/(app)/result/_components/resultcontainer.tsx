@@ -34,14 +34,16 @@ export const ResultContainer = ({
   };
 
   return (
-    <>
+    <div className="flex w-full flex-col gap-8 lg:flex-row lg:gap-12">
       <ResultCard
         beforeImage={beforeImage}
         afterImage={afterImage}
         isPublic={_isPublic}
         onTogglePublic={onTogglePublic}
       />
-      <RecommendationCard />
-    </>
+      <aside className="w-full lg:w-1/3">
+        <RecommendationCard />
+      </aside>
+    </div>
   );
 };

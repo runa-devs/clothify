@@ -23,11 +23,15 @@ export default function TryOnPage() {
     handleItemSelect,
     progress,
     processImage,
+    jobId,
+    jobStatus,
   } = useTryOn();
   const { isMobile } = useMobile();
 
   return (
     <main className="flex flex-1 flex-col">
+      {isGenerating && <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" />}
+
       <div className="container mx-auto max-w-5xl space-y-6 px-4 pt-24">
         <ProgressBar step={step} className="mb-10" />
 
@@ -39,7 +43,7 @@ export default function TryOnPage() {
         >
           {/* right panel */}
           <div className="mx-auto max-w-md md:mx-0">
-            {step === 1 && !isMobile && (
+            {step === 1 && !isMobile && !isGenerating && (
               <>
                 <UploadCard onSubmit={(file) => handleSelfieChange(file)} />
                 <Button
@@ -52,7 +56,7 @@ export default function TryOnPage() {
               </>
             )}
 
-            {step === 1 && isMobile && (
+            {step === 1 && isMobile && !isGenerating && (
               <>
                 <UploadCard onSubmit={(file) => handleSelfieChange(file)} />
                 <div className="mt-6">
@@ -89,53 +93,23 @@ export default function TryOnPage() {
 
             {isGenerating && (
               <div className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
-                <ProcessingCard progress={progress} />
+                <ProcessingCard progress={progress} jobStatus={jobStatus} />
+                {jobId && (
+                  <div className="mt-1 text-center text-xs text-muted-foreground">
+                    ジョブID: {jobId}
+                  </div>
+                )}
               </div>
             )}
           </div>
 
           {/* left panel */}
-          {step === 1 && !isMobile && (
+          {step === 1 && !isMobile && !isGenerating && (
             <div className="mx-auto mt-3 max-w-md md:mx-0">
               <UploadClothesCard onChange={handleClothesChange} disabled={false} />
             </div>
           )}
-          {step === 3 && !isGenerating && (
-            <div className="mx-auto mt-3 max-w-md md:mx-0">
-              <Card className="shadow-sm">
-                <CardHeader className="pb-4">
-                  <CardTitle>商品情報</CardTitle>
-                  <CardDescription>
-                    アイテムの詳細情報 ユーザー入力の画像のため詳細情報はありません
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-medium">{item}</h3>
-                      <p className="text-sm text-muted-foreground">{item}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="mt-4 shadow-sm">
-                <CardHeader className="pb-4">
-                  <CardTitle>ショップ</CardTitle>
-                  <CardDescription>
-                    アイテムの詳細情報 ユーザー入力の画像のためショップ情報はありません
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-medium">{item}</h3>
-                      <p className="text-sm text-muted-foreground">{item}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+          {step === 3 && !isGenerating && <div className="mx-auto mt-3 max-w-md md:mx-0"></div>}
         </div>
       </div>
     </main>

@@ -1,6 +1,6 @@
 import { env } from "@/env/server";
 import { auth } from "@/lib/auth";
-import { getBase64FromFile, sendTryOnRequest, type ComfyUIRequest } from "@/lib/comfyui";
+import { sendTryOnRequest, type ComfyUIRequest } from "@/lib/comfyui";
 import { prisma } from "@/lib/prisma";
 import { uploadFile } from "@/lib/s3";
 import { zValidator } from "@hono/zod-validator";
@@ -43,70 +43,79 @@ const route = app
       try {
         const { selfie, costume, category } = c.req.valid("form");
 
-        const selfieData = await getBase64FromFile(selfie);
-        const costumeData = await getBase64FromFile(costume);
-
-        const comfyRequest: ComfyUIRequest = {
-          selfieData,
-          costumeData,
-          category,
-        };
-
-        const resultBlob = await sendTryOnRequest(comfyRequest);
-
-        const buffer = Buffer.from(await resultBlob.arrayBuffer());
-
         const id = nanoid();
-        const resultKey = `try-on-results/${id}.png`;
-        const sourceKey = `try-on-source/${id}.png`; // source image means the image of the item
+        const selfieBuffer = Buffer.from(await selfie.arrayBuffer()).toString("base64");
+        const costumeBuffer = Buffer.from(await costume.arrayBuffer()).toString("base64");
 
-        try {
-          await uploadFile({
-            bucket: env.S3_BUCKET,
-            key: resultKey,
-            body: buffer,
-            contentType: "image/png",
-          });
-        } catch (error) {
-          console.error("Try-on result upload error:", error);
-        }
-
-        try {
-          await uploadFile({
-            bucket: env.S3_BUCKET,
-            key: sourceKey,
-            body: Buffer.from(await selfie.arrayBuffer()),
-            contentType: "image/png",
-          });
-        } catch (error) {
-          console.error("Try-on source upload error:", error);
-        }
-
-        await prisma.tryOnResult.create({
+        await prisma.tryOnJob.create({
           data: {
             id,
-            resultKey,
-            sourceKey,
-            userId: session?.user.id,
-            shareId: id,
+            sourceKey: "",
+            costumeKey: "",
+            category,
+            status: "PENDING",
+            userId: session.user.id,
           },
         });
 
+        void processTryOnJob(id, selfieBuffer, costumeBuffer);
+
         return c.json({
           success: true,
-          id,
-          resultKey,
-          sourceKey,
+          jobId: id,
+          status: "PENDING",
+          message:
+            "試着処理を開始しました。処理状況を確認するには /api/try-on/status/:id にアクセスしてください。",
         });
       } catch (error) {
-        console.error("Try-on processing error:", error);
+        console.error("Try-on queue error:", error);
         return c.json(
-          { success: false, error: "試着処理に失敗しました", details: String(error) },
+          { success: false, error: "試着処理のキューイングに失敗しました", details: String(error) },
           { status: 500 }
         );
       }
     }
   )
+  .get("/try-on/status/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
+    const session = await auth();
+    if (!session) {
+      return c.json({ success: false, error: "Not authenticated" }, { status: 401 });
+    }
+
+    const { id } = c.req.param();
+
+    const job = await prisma.tryOnJob.findUnique({
+      where: { id, userId: session.user.id },
+    });
+
+    if (!job) {
+      return c.json({ success: false, error: "Job not found" }, { status: 404 });
+    }
+
+    if (job.status === "COMPLETED") {
+      const result = await prisma.tryOnResult.findUnique({
+        where: { id: job.id },
+      });
+
+      if (result) {
+        return c.json({
+          success: true,
+          status: job.status,
+          result: {
+            id: result.id,
+            resultKey: result.resultKey,
+            sourceKey: result.sourceKey,
+          },
+        });
+      }
+    }
+
+    return c.json({
+      success: true,
+      status: job.status,
+      message: job.status === "FAILED" ? job.error || "処理に失敗しました" : undefined,
+    });
+  })
   .post(
     "/result/:id/public",
     zValidator("json", z.object({ isPublic: z.boolean() })),
@@ -134,6 +143,82 @@ const route = app
       return c.json({ success: true, isPublic: result.isPublic });
     }
   );
+async function processTryOnJob(
+  jobId: string,
+  selfieData: string,
+  costumeData: string
+): Promise<void> {
+  try {
+    const job = await prisma.tryOnJob.findUnique({
+      where: { id: jobId },
+    });
+
+    if (!job) {
+      console.error(`Job ${jobId} not found`);
+      return;
+    }
+
+    if (!selfieData || !costumeData) {
+      throw new Error("Image data not found in job details");
+    }
+
+    await prisma.tryOnJob.update({
+      where: { id: jobId },
+      data: { status: "PROCESSING" },
+    });
+
+    const comfyRequest: ComfyUIRequest = {
+      selfieData,
+      costumeData,
+      category: job.category,
+    };
+
+    const resultBlob = await sendTryOnRequest(comfyRequest);
+    const resultBuffer = Buffer.from(await resultBlob.arrayBuffer());
+
+    const resultKey = `try-on-results/${jobId}.png`;
+    await uploadFile({
+      bucket: env.S3_BUCKET,
+      key: resultKey,
+      body: resultBuffer,
+      contentType: "image/png",
+    });
+
+    const originalSelfieBuffer = Buffer.from(selfieData, "base64");
+    const originalSelfieKey = `try-on-source/${jobId}.png`;
+    await uploadFile({
+      bucket: env.S3_BUCKET,
+      key: originalSelfieKey,
+      body: originalSelfieBuffer,
+      contentType: "image/png",
+    });
+
+    await prisma.tryOnResult.create({
+      data: {
+        id: jobId,
+        resultKey,
+        sourceKey: originalSelfieKey,
+        userId: job.userId,
+        shareId: jobId,
+      },
+    });
+
+    await prisma.tryOnJob.update({
+      where: { id: jobId },
+      data: { status: "COMPLETED" },
+    });
+  } catch (error) {
+    console.error(`Processing error for job ${jobId}:`, error);
+
+    await prisma.tryOnJob.update({
+      where: { id: jobId },
+      data: {
+        status: "FAILED",
+        error: error instanceof Error ? error.message : String(error),
+      },
+    });
+  }
+}
 
 export type AppType = typeof route;
 

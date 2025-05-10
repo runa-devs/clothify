@@ -39,8 +39,8 @@ export default async function ResultPage({ params }: ResultPageProps) {
   });
 
   return (
-    <div className="container mx-auto flex size-full w-full flex-1 items-center justify-normal">
-      <div className="mt-32 flex w-full flex-col justify-center gap-4 p-3 md:mt-0 md:flex-row">
+    <div className="container mx-auto flex size-full flex-1 flex-col items-center justify-center p-4 pt-20 md:p-6 md:pt-24">
+      <div className="flex w-full max-w-5xl flex-col items-center justify-center gap-8 md:flex-row md:items-start md:gap-12">
         <ResultContainer
           beforeImage={sourceUrl}
           afterImage={resultUrl}
