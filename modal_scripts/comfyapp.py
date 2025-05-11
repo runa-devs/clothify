@@ -226,7 +226,7 @@ class ComfyUI:
             print(f"Error decoding queue response: {e}", file=sys.stderr)
             raise Exception(f"Failed to decode queue response: {e}")
 
-        timeout_seconds = 200
+        timeout_seconds = 280
         start_time = time.time()
         while time.time() - start_time < timeout_seconds:
             print(

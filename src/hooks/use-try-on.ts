@@ -51,8 +51,8 @@ export const useTryOn = () => {
   });
   const [error, setError] = useState<string | null>(null);
 
-  // 処理の予想時間（ミリ秒）- 約30秒
-  const ESTIMATED_PROCESSING_TIME = 130000;
+  // 処理の予想時間（ミリ秒）- 約4分40秒
+  const ESTIMATED_PROCESSING_TIME = 280000;
 
   const simulateProgress = (value: number) => {
     setProgress((prev) => Math.max(prev, value));
