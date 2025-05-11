@@ -151,11 +151,11 @@ def ui():
 
 @app.cls(
     scaledown_window=15,
-    gpu="A10G",
+    gpu="H100",
     volumes={"/cache": vol},
     # enable_memory_snapshot=True,
 )
-@modal.concurrent(max_inputs=5)
+@modal.concurrent(max_inputs=16)
 class ComfyUI:
     port: int = 8188
 
