@@ -14,6 +14,14 @@ This project is a web application template with authentication features, using N
 - **Docker**: Database containerization for local development
 - **T3 Env**: Type-safe environment variables with validation
 
+## Visual Overview
+
+Here is a visual overview of the application:
+
+| Original Image | Input for Processing | Processed Result |
+| :------------: | :------------------: | :--------------: |
+| ![Original Image 1](./docs/images/original/1.jpg) | ![Input Image 1](./docs/images/input/1.jpg) | ![Result Image 1](./docs/images/result/1.png) |
+
 ## Setup Instructions
 
 1. Clone the repository
