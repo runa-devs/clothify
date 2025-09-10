@@ -10,7 +10,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 export const s3 = new S3Client({
   region: "auto",
-  endpoint: process.env.S3_ENDPOINT,
+  endpoint: env.S3_ENDPOINT,
   credentials: {
     accessKeyId: env.S3_ACCESS_KEY,
     secretAccessKey: env.S3_SECRET_KEY,
