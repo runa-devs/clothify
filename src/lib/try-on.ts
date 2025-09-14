@@ -52,6 +52,7 @@ export const generateImage = async (params: TryOnRequestParams) => {
         content: PROMPT,
       },
     ],
+    maxRetries: 5,
   });
 
   for (const file of result.files) {

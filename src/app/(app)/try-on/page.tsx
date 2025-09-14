@@ -24,8 +24,6 @@ export default function TryOnPage() {
     handleItemSelect,
     progress,
     processImage,
-    jobId,
-    jobStatus,
     error,
   } = useTryOn();
   const { isMobile } = useMobile();
@@ -57,7 +55,7 @@ export default function TryOnPage() {
                 <UploadCard onSubmit={(file) => handleSelfieChange(file)} />
                 <Button
                   className={cn("mt-6 w-full")}
-                  disabled={!payload.selfieImage || (!!payload.clothesImage && !payload.category)}
+                  disabled={!payload.selfieImage}
                   onClick={completeStep1}
                 >
                   {payload.clothesImage ? "試着する" : "商品を選択する"}
@@ -73,7 +71,7 @@ export default function TryOnPage() {
                 </div>
                 <Button
                   className="mt-6 w-full"
-                  disabled={!payload.selfieImage || (!!payload.clothesImage && !payload.category)}
+                  disabled={!payload.selfieImage}
                   onClick={completeStep1}
                 >
                   {payload.clothesImage ? "試着する" : "商品を選択する"}
@@ -102,12 +100,7 @@ export default function TryOnPage() {
 
             {isGenerating && (
               <div className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
-                <ProcessingCard progress={progress} jobStatus={jobStatus} />
-                {jobId && (
-                  <div className="mt-1 text-center text-xs text-muted-foreground">
-                    ジョブID: {jobId}
-                  </div>
-                )}
+                <ProcessingCard progress={progress} />
               </div>
             )}
           </div>
