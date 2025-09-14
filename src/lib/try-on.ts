@@ -48,7 +48,7 @@ export const generateImage = async (params: TryOnRequestParams) => {
         ],
       },
       {
-        role: "system",
+        role: "user",
         content: PROMPT,
       },
     ],
