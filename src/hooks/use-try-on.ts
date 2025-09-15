@@ -161,10 +161,11 @@ export const useTryOn = () => {
         const data = (await result.json()) as TryOnResponse;
         if (data.result?.id) {
           router.push(`/result/${data.result.id}`);
-          setIsGenerating(false);
-          setStartTime(null);
+          return;
         }
-
+        setIsGenerating(false);
+        setStartTime(null);
+        setError("予期せぬレスポンスです");
         return;
       }
 
