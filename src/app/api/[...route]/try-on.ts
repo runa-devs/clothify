@@ -1,5 +1,6 @@
 import { env } from "@/env/server";
 import { auth } from "@/lib/auth";
+import { padClothesToSelfieAspect } from "@/lib/image-aspect";
 import { prisma } from "@/lib/prisma";
 import { uploadFile } from "@/lib/s3";
 import { productSchema } from "@/lib/scraper";
@@ -35,7 +36,13 @@ export const tryOnRoute = new Hono().post(
     try {
       const jobId = nanoid();
       const selfieBase64 = Buffer.from(await selfie.arrayBuffer()).toString("base64");
-      const costumeBase64 = Buffer.from(await costume.arrayBuffer()).toString("base64");
+      const costumeBase64Raw = Buffer.from(await costume.arrayBuffer()).toString("base64");
+
+      // Normalize clothes image to match selfie aspect ratio
+      const costumeBase64 = await padClothesToSelfieAspect(selfieBase64, costumeBase64Raw, {
+        background: { r: 255, g: 255, b: 255, alpha: 1 },
+        mode: "pad",
+      });
 
       const generatedBase64 = await generateImage({
         selfieData: selfieBase64,
