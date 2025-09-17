@@ -19,17 +19,16 @@ export const Header = () => {
   };
 
   return (
-    <header
-      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled || isMenuOpen ? "bg-background/80 shadow-sm backdrop-blur-md" : "bg-transparent"
-      }`}
-    >
-      <div className="container mx-auto flex h-16 max-w-5xl items-center justify-between px-4 md:px-6 lg:px-8">
+    <header className="fixed top-3 z-50 w-full">
+      <div
+        className={`container mx-auto flex h-16 max-w-4xl items-center justify-between px-4 md:px-6 lg:px-8 transition-all duration-300 rounded-full ${
+          isScrolled || isMenuOpen
+            ? "bg-background/50 shadow-sm backdrop-blur-md "
+            : "bg-transparent"
+        }`}
+      >
         <Link href="/" className="flex items-center justify-center gap-2">
           <Image src="/logo.svg" className="dark:invert" alt="Clothify" height={96} width={96} />
-          <span className="rounded-full bg-blue-500 px-2 py-0.5 text-sm font-semibold text-white">
-            Beta
-          </span>
         </Link>
 
         <div className="flex items-center gap-4">
@@ -38,7 +37,7 @@ export const Header = () => {
               ログイン
             </Button>
           ) : (
-            <Button asChild size="sm">
+            <Button asChild className="rounded-full">
               <Link href="/try-on">無料で始める</Link>
             </Button>
           )}
