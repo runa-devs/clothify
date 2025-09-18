@@ -9,7 +9,6 @@ import { zValidator } from "@hono/zod-validator";
 import { Buffer } from "buffer";
 import { Hono } from "hono";
 import { nanoid } from "nanoid";
-import { File } from "node:buffer";
 import { z } from "zod";
 
 const tryOnSchema = z.object({
