@@ -26,8 +26,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm lint
-      # `pnpm build` also runs `prisma migrate deploy`, which needs a database
-      - run: pnpm exec next build
+      - run: pnpm build
 
   automerge:
     needs: check

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "prisma migrate deploy && next build",
+    "build": "next build",
     "check": "next lint && tsc --noEmit",
     "db:generate": "dotenv -e .env.local -- prisma migrate dev",
     "db:migrate": "dotenv -e .env.local -- prisma migrate deploy",
@@ -17,7 +17,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
-    "start": "next start",
+    "start": "prisma migrate deploy && next start",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
