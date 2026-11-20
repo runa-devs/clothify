@@ -16,6 +16,7 @@ export const env = createEnv({
     S3_BUCKET: z.string().min(1),
     S3_ENDPOINT: z.string().min(1),
     GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1),
+    DEMO: z.stringbool().default(false),
   },
   /**
    * Specify runtimeEnv manually for Next.js < 13.4.4
@@ -31,6 +32,7 @@ export const env = createEnv({
     S3_BUCKET: process.env.S3_BUCKET,
     S3_ENDPOINT: process.env.S3_ENDPOINT,
     GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+    DEMO: process.env.DEMO,
   },
   /**
    * Skip validation of environment variables (useful for CI/CD)
