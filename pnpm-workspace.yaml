@@ -1,6 +1,15 @@
 allowBuilds:
-  '@prisma/client': set this to true or false
-  '@prisma/engines': set this to true or false
-  prisma: set this to true or false
-  sharp: set this to true or false
-  unrs-resolver: set this to true or false
+  '@prisma/client': true
+  '@prisma/engines': true
+  prisma: true
+  sharp: true
+  unrs-resolver: true
+
+# Without this, pnpm 12 prepends an env document to the lockfile and GitHub's dependency graph (Dependabot) reads nothing
+pmOnFail: ignore
+
+overrides:
+  # next pins postcss 8.4.31, which has known vulnerabilities
+  postcss: $postcss
+  # @ai-sdk/provider-utils 3.x still requires undici 5, which has no patched release
+  undici@<6: ^6.29.1
