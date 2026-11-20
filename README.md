@@ -85,6 +85,15 @@ Recommend [Vercel](https://vercel.com/) or [Coolify](https://coolify.io/) for de
 
 On coolify (or other self-hosted deployment platforms), you should set `AUTH_TRUST_HOST=true` in environment variables.
 
+### Demo mode
+
+Set `DEMO=true` to deploy a demo that costs nothing to run. In demo mode:
+
+- The try-on page does not require sign-in.
+- Uploaded images are not stored, and no AI generation runs. The processing screen is shown for about 15 seconds, followed by a sample result.
+
+The public site runs in demo mode. To use real try-on generation, clone this repository and run it with your own credentials (Gemini API key, S3-compatible storage, and OAuth app).
+
 ## Technologies Used
 
 - [Next.js](https://nextjs.org/)

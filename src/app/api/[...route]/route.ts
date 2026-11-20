@@ -15,6 +15,9 @@ import { catalogRoute } from "./catalog";
 
 const app = new Hono().basePath("/api");
 
+// Long enough for the processing screen to cycle through all of its steps once
+const DEMO_PROCESSING_MS = 15_000;
+
 const tryOnSchema = z.object({
   selfie: z.instanceof(File, { message: "自撮り写真が必要です" }),
   costume: z.instanceof(File, { message: "衣服の画像が必要です" }),
@@ -59,6 +62,14 @@ const route = app
       }
     }),
     async (c) => {
+      if (env.DEMO) {
+        await new Promise((resolve) => setTimeout(resolve, DEMO_PROCESSING_MS));
+        return c.json({
+          success: true,
+          result: { id: "demo", resultKey: "", sourceKey: "" },
+        });
+      }
+
       const session = await auth();
       if (!session) {
         return c.json({ success: false, error: "Not authenticated" }, { status: 401 });
