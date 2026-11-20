@@ -55,7 +55,7 @@ const route = app
     "/try-on",
     zValidator("form", tryOnSchema, (result, c) => {
       if (!result.success) {
-        return c.json({ success: false, errors: result.error.format() }, { status: 400 });
+        return c.json({ success: false, errors: z.formatError(result.error) }, { status: 400 });
       }
     }),
     async (c) => {
