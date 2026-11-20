@@ -1,0 +1,67 @@
+name: Security patch
+
+on:
+  schedule:
+    # 03:47 JST daily; off the hour because top-of-hour runs are often delayed
+    - cron: "47 18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: security-patch
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SKIP_ENV_VALIDATION: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Keep the push token out of reach of dependency code that runs during install and build
+          persist-credentials: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+
+      # pnpm 12 writes `^<patched>` overrides to pnpm-workspace.yaml, so they stay within the patched major
+      - name: Add overrides for vulnerable packages
+        id: fix
+        run: |
+          pnpm audit --fix
+          if git diff --quiet pnpm-workspace.yaml; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.fix.outputs.changed == 'true'
+        run: pnpm install --no-frozen-lockfile
+      - if: steps.fix.outputs.changed == 'true'
+        run: head -n 1 pnpm-lock.yaml | grep -vqx -- '---'
+      - if: steps.fix.outputs.changed == 'true'
+        run: pnpm typecheck
+      - if: steps.fix.outputs.changed == 'true'
+        run: pnpm lint
+      - if: steps.fix.outputs.changed == 'true'
+        run: pnpm build
+
+      # Coolify deploys on every push to main
+      - name: Commit and push
+        if: steps.fix.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pnpm-workspace.yaml pnpm-lock.yaml
+          git commit -m "fix(deps): patch vulnerable dependencies"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${GITHUB_REF}"
+
+      # Fail when something is still vulnerable so GitHub's failed-run email reaches a human
+      - run: pnpm audit
