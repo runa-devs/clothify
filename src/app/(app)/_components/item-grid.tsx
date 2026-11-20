@@ -57,6 +57,7 @@ export const ItemGrid = ({ onItemSelect, className }: ItemGridProps) => {
                     query: filter,
                   },
                 });
+                if (!res.ok) return;
                 const data = await res.json();
                 setProducts(data.products);
                 console.log(data);
