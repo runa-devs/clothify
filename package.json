@@ -47,7 +47,7 @@
     "encoding-japanese": "^2.5.0",
     "framer-motion": "^12.43.0",
     "hono": "^4.13.19",
-    "lucide-react": "^0.447.0",
+    "lucide-react": "^1.73.0",
     "nanoid": "^5.1.16",
     "next": "^15.5.29",
     "next-auth": "5.0.0-beta.32",
